@@ -85,7 +85,7 @@ def receive_message():
             'messgae':f"{e}"
         }
 
-  
+
 @frappe.whitelist()
 def generate_keys(user):
     user_details = frappe.get_doc("User", user)
@@ -422,7 +422,7 @@ def get_module_data():
         app_modules = frappe.db.get_all('Mobile App Module', fields=['*'], order_by="sequence_id asc")
         results = []
         for module in app_modules:
-            module_items = frappe.get_all('Mobile App Module Items', filters={'parent': module.name}, fields=['*'])
+            module_items = frappe.get_all('Mobile App Module Items', filters={'parent': module.name, 'active':1}, fields=['*'])
             results.append({'module_name': module.get('module_name'),'image': module.get('image'),'items': module_items})
         frappe.response.message={'status':True,'message':'','data':results}
         return
@@ -577,7 +577,6 @@ def employee_details():
         return
 
 
-
 @frappe.whitelist()
 def user_details():
     try:
@@ -609,7 +608,6 @@ def user_details():
             'message':f'{e}'
         }
         return
-
 
 
 @frappe.whitelist()

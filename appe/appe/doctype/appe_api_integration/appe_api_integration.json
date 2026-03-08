@@ -1,6 +1,7 @@
 {
  "actions": [],
  "allow_rename": 1,
+ "autoname": "field:integration_name",
  "creation": "2025-08-16 09:38:50.894674",
  "doctype": "DocType",
  "engine": "InnoDB",
@@ -31,7 +32,8 @@
   {
    "fieldname": "integration_name",
    "fieldtype": "Data",
-   "label": "Integration Name"
+   "label": "Integration Name",
+   "unique": 1
   },
   {
    "fieldname": "url",
@@ -61,10 +63,11 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-08-16 09:44:16.271284",
+ "modified": "2026-03-08 10:13:29.624920",
  "modified_by": "Administrator",
  "module": "Appe",
  "name": "Appe API Integration",
+ "naming_rule": "By fieldname",
  "owner": "Administrator",
  "permissions": [
   {

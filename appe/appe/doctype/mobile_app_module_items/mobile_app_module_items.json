@@ -15,6 +15,7 @@
   "web_url",
   "description",
   "image",
+  "active",
   "json"
  ],
  "fields": [
@@ -75,6 +76,8 @@
   {
    "fieldname": "refrence_docname",
    "fieldtype": "Dynamic Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Refrence Docname",
    "options": "refrence_doctype"
   },
@@ -91,12 +94,21 @@
    "label": "Web URL",
    "mandatory_depends_on": "eval:doc.type==\"WebPage\"",
    "max_height": "35px"
+  },
+  {
+   "default": "0",
+   "fieldname": "active",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
+   "label": "Active"
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2026-03-05 09:09:43.743804",
+ "modified": "2026-03-08 08:24:31.376033",
  "modified_by": "Administrator",
  "module": "Appe",
  "name": "Mobile App Module Items",

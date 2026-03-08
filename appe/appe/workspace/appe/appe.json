@@ -84,9 +84,9 @@
   {
    "hidden": 0,
    "is_query_report": 0,
-   "label": "Number Card",
+   "label": "Mobile App Screen",
    "link_count": 0,
-   "link_to": "Number Card",
+   "link_to": "Appe Screen",
    "link_type": "DocType",
    "onboard": 0,
    "type": "Link"
@@ -94,9 +94,9 @@
   {
    "hidden": 0,
    "is_query_report": 0,
-   "label": "Dashboard Chart",
+   "label": "Appe API Integration",
    "link_count": 0,
-   "link_to": "Dashboard Chart",
+   "link_to": "Appe API Integration",
    "link_type": "DocType",
    "onboard": 0,
    "type": "Link"
@@ -104,15 +104,25 @@
   {
    "hidden": 0,
    "is_query_report": 0,
-   "label": "Dashboard",
+   "label": "Mobile App Notification",
    "link_count": 0,
-   "link_to": "Dashboard",
+   "link_to": "Mobile App Notification",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Appe Chat",
+   "link_count": 0,
+   "link_to": "Appe Chat",
    "link_type": "DocType",
    "onboard": 0,
    "type": "Link"
   }
  ],
- "modified": "2025-08-31 12:54:42.800780",
+ "modified": "2026-03-08 08:06:36.724483",
  "modified_by": "Administrator",
  "module": "Appe",
  "name": "Appe",
@@ -146,6 +156,12 @@
    "label": "Mobile App Module",
    "link_to": "Mobile App Module",
    "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "doc_view": "List",
+   "label": "Mobile App Screen",
+   "link_to": "Appe Screen",
    "type": "DocType"
   }
  ],

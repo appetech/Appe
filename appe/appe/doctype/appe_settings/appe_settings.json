@@ -15,7 +15,9 @@
   "enable_leave_balance",
   "setup_tab",
   "onesignal_app_id",
-  "onesignal_api_key"
+  "onesignal_api_key",
+  "map_setup_tab",
+  "google_map_api"
  ],
  "fields": [
   {
@@ -77,13 +79,24 @@
    "fieldtype": "Small Text",
    "label": "OneSignal App Id",
    "max_height": "100px"
+  },
+  {
+   "fieldname": "map_setup_tab",
+   "fieldtype": "Tab Break",
+   "label": "Map Setup"
+  },
+  {
+   "fieldname": "google_map_api",
+   "fieldtype": "Small Text",
+   "label": "Google Map API",
+   "max_height": "50px"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2025-11-30 00:03:13.728897",
+ "modified": "2026-03-08 08:11:06.613393",
  "modified_by": "Administrator",
  "module": "Appe",
  "name": "Appe Settings",

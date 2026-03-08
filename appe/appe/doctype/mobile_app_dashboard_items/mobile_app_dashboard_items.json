@@ -56,6 +56,9 @@
   {
    "fieldname": "type",
    "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
    "label": "Type",
    "options": "\nDoctype\nSingle Doctype\nReport\nForm\nDashboard\nScreen\nWebPage\nChart\nNumber Card",
    "reqd": 1
@@ -68,6 +71,8 @@
   {
    "fieldname": "refrence_docname",
    "fieldtype": "Dynamic Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Refrence Docname",
    "options": "linked_doctype"
   },
@@ -97,7 +102,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2026-03-05 09:14:24.255962",
+ "modified": "2026-03-08 08:23:15.692356",
  "modified_by": "Administrator",
  "module": "Appe",
  "name": "Mobile App Dashboard Items",

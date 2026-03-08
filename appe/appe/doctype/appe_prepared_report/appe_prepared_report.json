@@ -8,6 +8,8 @@
  "field_order": [
   "report",
   "appe_report",
+  "appe_api_integration",
+  "third_party_report_name",
   "prepared_report",
   "queued_by",
   "job_id",
@@ -29,8 +31,7 @@
    "fieldtype": "Link",
    "label": "Report",
    "options": "Report",
-   "read_only": 1,
-   "reqd": 1
+   "read_only": 1
   },
   {
    "fieldname": "appe_report",
@@ -115,11 +116,26 @@
    "options": "\nPortrait\nLandscape",
    "read_only": 1,
    "reqd": 1
+  },
+  {
+   "fetch_from": "appe_report.appe_api_integration",
+   "fieldname": "appe_api_integration",
+   "fieldtype": "Link",
+   "label": "Appe Api Integration",
+   "options": "Appe API Integration",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "appe_report.third_party_report_name",
+   "fieldname": "third_party_report_name",
+   "fieldtype": "Small Text",
+   "label": "Third Party Report Name",
+   "max_height": "50px"
   }
  ],
  "grid_page_length": 50,
  "links": [],
- "modified": "2025-07-30 23:33:35.077052",
+ "modified": "2026-03-08 11:18:57.706602",
  "modified_by": "Administrator",
  "module": "Appe",
  "name": "Appe Prepared Report",

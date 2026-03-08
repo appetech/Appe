@@ -6,6 +6,8 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "appe_api_integration",
+  "third_party_report_name",
   "report",
   "report_name",
   "filters",
@@ -16,11 +18,12 @@
  ],
  "fields": [
   {
+   "depends_on": "eval:!doc.appe_api_integration",
    "fieldname": "report",
    "fieldtype": "Link",
    "label": "Report",
-   "options": "Report",
-   "reqd": 1
+   "mandatory_depends_on": "eval:!doc.appe_api_integration",
+   "options": "Report"
   },
   {
    "fieldname": "report_name",
@@ -62,12 +65,24 @@
    "fieldtype": "Small Text",
    "in_list_view": 1,
    "label": "Description"
+  },
+  {
+   "fieldname": "appe_api_integration",
+   "fieldtype": "Link",
+   "label": "Appe Api Integration",
+   "link_filters": "[[\"Appe API Integration\",\"is_report_api\",\"=\",1]]",
+   "options": "Appe API Integration"
+  },
+  {
+   "fieldname": "third_party_report_name",
+   "fieldtype": "Autocomplete",
+   "label": "Third Party Report Name"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-07-30 23:30:55.802714",
+ "modified": "2026-03-08 10:15:38.788480",
  "modified_by": "Administrator",
  "module": "Appe",
  "name": "Appe Report",
