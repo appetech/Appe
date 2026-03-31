@@ -4,11 +4,18 @@ import random
 import frappe
 import base64
 import os
-from frappe.utils import get_files_path, get_site_name, now
+from frappe.utils import get_files_path, get_site_name, now, get_url, today
 import requests
 from frappe.utils.password import check_password, get_password_reset_limit
 import gzip
-from frappe.utils import get_url
+
+
+
+@frappe.whitelist()
+def get_apps():
+    installed_apps = frappe.get_installed_apps()
+    return "erpnext" in installed_apps
+
 
 
 @frappe.whitelist()
@@ -71,8 +78,7 @@ def update_appe_reports(doc,event):
 def receive_message():
     try:
         message = frappe.form_dict
-        # frappe.publish_realtime(event='new_chat_message', user= message.get('receiverId'), message={'user': message.get('receiverId'), 'message': message})
-        frappe.publish_realtime(event='chat_message', user= "kamesh3928@gmail.com", message={'user': 'kamesh3928@gmail.com', 'message': 'kamesh3928@gmail.com kamesh3928@gmail.com kamesh3928@gmail.com kamesh3928@gmail.com kamesh3928@gmail.com kamesh3928@gmail.com kamesh3928@gmail.com kamesh3928@gmail.com kamesh3928@gmail.com kamesh3928@gmail.com kamesh3928@gmail.com kamesh3928@gmail.com'})
+        frappe.publish_realtime(event='new_chat_message', user= message.get('receiverId'), message={'user': message.get('receiverId'), 'message': message})
 
         frappe.response.message={
             'status':True,
@@ -127,12 +133,13 @@ def login_user(usr, pwd):
             }
             return
         api_key, api_secret = generate_keys(user_email)
-        employee_data = frappe.db.get_all('Appe Employee', filters={'user_id': user_email}, fields=['*'])
+        erpnext_exists = get_apps()
+        employee_data = frappe.db.get_all("Employee" if erpnext_exists else "Appe Employee", filters={'user_id': user_email}, fields=['*'])
         if employee_data :
             settings = frappe.get_doc('Appe Settings')
             userm[0]['checkin_mandatory']= employee_data[0].checkin_mandatory or 0
             userm[0]['enable_live_location_tracking']= employee_data[0].enable_live_location_tracking or 0
-            userm[0]['enable_faceid']= 0
+            userm[0]['enable_faceid']= 0            
             frappe.local.response["message"] = {
                 "status": True,
                 "type": "employee",
@@ -142,8 +149,10 @@ def login_user(usr, pwd):
                     "user": employee_data[0].user_id,
                     "settings": settings,
                     "userData": userm[0],
+                    "erpnext_exists": get_apps()
                 }
             }
+            
             return 
         else:
             settings = frappe.get_doc('Appe Settings')
@@ -236,7 +245,7 @@ def verifyOTP(usr, pwd):
 @frappe.whitelist()
 def storelocation():
     try:
-        # frappe.log_error("location",frappe.form_dict)
+        frappe.log_error("location",frappe.form_dict)
         locations = frappe.form_dict.get('locations') or []
 
         for loc in locations:
@@ -256,9 +265,10 @@ def storelocation():
             current_timestamp = frappe.utils.format_datetime(frappe.utils.get_datetime(timestamp), 'YYYY-MM-dd HH:mm:ss')
 
             user = frappe.session.user
+            erpnext_exists = get_apps()
 
-            if frappe.db.exists("Appe Employee", {"user_id": user}):
-                employee = frappe.get_doc("Appe Employee", {"user_id": user})
+            if frappe.db.exists("Employee" if erpnext_exists else "Appe Employee", {"user_id": user}):
+                employee = frappe.get_doc("Employee" if erpnext_exists else "Appe Employee", {"user_id": user})
                 two_days_ago = frappe.utils.add_days(frappe.utils.now_datetime(), -2)
 
                 recent_timestamps = frappe.db.get_all(
@@ -284,6 +294,7 @@ def storelocation():
                     "doctype": "Employee Location",
                     "latitude": latitude,
                     "longitude": longitude,
+                    "employee_doctype":"Employee" if erpnext_exists else "Appe Employee",
                     "employee": employee.name,
                     "battery_level": device_info.get('battery_level'),
                     "gps": device_info.get('gps_status'),
@@ -319,8 +330,9 @@ def storelocation():
 def gettasks_and_request_and_attendancedata():
     try:
         user = frappe.session.user
+        erpnext_exists = get_apps()
         emp = frappe.get_list(
-            "Appe Employee",
+            "Employee" if erpnext_exists else "Appe Employee",
             filters={"user_id": user},
             fields=["*"]
         )
@@ -496,65 +508,124 @@ def remove_assignment():
         }
         return
 
+
 @frappe.whitelist()
 def leave_balance():
     try:
-        employee = frappe.get_doc("Appe Employee", {"user_id": frappe.session.user})
-        if employee:
-            frappe.response.message = {
-                'status': True,
-                'message': 'Successfully find employee',
-                'data': [
-                    {
-                        "type": "Annual Leave",
-                        "total": 20,
-                        "used": 8,
-                        "remaining": 12,
-                        "color": "0xFF3B82F6",  # Blue
-                    },
-                    {
-                        "type": "Sick Leave",
-                        "total": 10,
-                        "used": 3,
-                        "remaining": 7,
-                        "color": "0xFFEF4444",  # Red
-                    },
-                    {
-                        "type": "Casual Leave",
-                        "total": 12,
-                        "used": 5,
-                        "remaining": 7,
-                        "color": "0xFF10B981",  # Green
-                    },
-                    {
-                        "type": "Work From Home",
-                        "total": 15,
-                        "used": 6,
-                        "remaining": 9,
-                        "color": "0xFFF59E0B",  # Orange
-                    },
-                ]
-            }
-            return
+        erpnext_exists = "erpnext" in frappe.get_installed_apps()
+
+        # ✅ Conditional import
+        if erpnext_exists:
+            from erpnext.hr.doctype.leave_application.leave_application import get_leave_balance_on
         else:
-            frappe.response.message = {
+            get_leave_balance_on = None
+
+        employee = frappe.get_doc(
+            "Employee" if erpnext_exists else "Appe Employee",
+            {"user_id": frappe.session.user}
+        )
+
+        if not employee:
+            return {
                 'status': False,
                 'message': 'No employee found'
             }
-            return
-    except Exception as e:
-        frappe.log_error("leave_balance error", f"{e}")
-        frappe.response.message = {
-            'status': False,
-            'message': f'{e}'
+
+        data = []
+
+        if erpnext_exists:
+            leave_types = frappe.get_all("Leave Type", fields=["name"])
+
+            color_map = {
+                "Annual Leave": "0xFF3B82F6",
+                "Sick Leave": "0xFFEF4444",
+                "Casual Leave": "0xFF10B981",
+                "Work From Home": "0xFFF59E0B"
+            }
+
+            for lt in leave_types:
+                leave_type = lt.name
+
+                total = frappe.db.sql("""
+                    SELECT SUM(total_leaves_allocated)
+                    FROM `tabLeave Allocation`
+                    WHERE employee=%s AND leave_type=%s AND docstatus=1
+                """, (employee.name, leave_type))[0][0] or 0
+
+                used = frappe.db.sql("""
+                    SELECT SUM(total_leave_days)
+                    FROM `tabLeave Application`
+                    WHERE employee=%s AND leave_type=%s AND status='Approved'
+                """, (employee.name, leave_type))[0][0] or 0
+
+                remaining = get_leave_balance_on(
+                    employee.name,
+                    leave_type,
+                    today()
+                ) if get_leave_balance_on else (total - used)
+
+                data.append({
+                    "type": leave_type,
+                    "total": total,
+                    "used": used,
+                    "remaining": remaining,
+                    "color": color_map.get(leave_type, "0xFF6B7280")
+                })
+
+        else:
+            data = [
+                {
+                    "type": "Annual Leave",
+                    "total": 20,
+                    "used": 8,
+                    "remaining": 12,
+                    "color": "0xFF3B82F6",
+                },
+                {
+                    "type": "Sick Leave",
+                    "total": 10,
+                    "used": 3,
+                    "remaining": 7,
+                    "color": "0xFFEF4444",
+                },
+                {
+                    "type": "Casual Leave",
+                    "total": 12,
+                    "used": 5,
+                    "remaining": 7,
+                    "color": "0xFF10B981",
+                },
+                {
+                    "type": "Work From Home",
+                    "total": 15,
+                    "used": 6,
+                    "remaining": 9,
+                    "color": "0xFFF59E0B",
+                },
+            ]
+
+        return {
+            'status': True,
+            'message': 'Leave balance fetched successfully',
+            'data': data
         }
-        return
+
+    except Exception as e:
+        frappe.log_error("leave_balance error", str(e))
+        return {
+            'status': False,
+            'message': str(e)
+        }
+
+
+
 
 @frappe.whitelist()
 def employee_details():
     try:
         # frappe.log_error('employee_checkin_status',frappe.form_dict)
-        employee = frappe.get_doc("Appe Employee",{"user_id":frappe.session.user})
+        erpnext_exists = get_apps()
+        employee = frappe.get_doc("Employee" if erpnext_exists else "Appe Employee",{"user_id":frappe.session.user})
         if employee:
             frappe.response.message={
                 'status':True,
@@ -583,7 +654,8 @@ def user_details():
         user = frappe.db.get_all('User', filters={'email': frappe.session.user}, fields=['name','email','username','full_name','user_image','mobile_no','location','gender','language','time_zone','enabled','user_type'])
         
         if user:
-            employee_data = frappe.db.get_all('Appe Employee', filters={'user_id': frappe.session.user}, fields=['*'])
+            erpnext_exists = get_apps()
+            employee_data = frappe.db.get_all("Employee" if erpnext_exists else "Appe Employee", filters={'user_id': frappe.session.user}, fields=['*'])
             if employee_data :
                 settings = frappe.get_doc('Appe Settings')
                 user[0]['checkin_mandatory']= employee_data[0].checkin_mandatory or 0
@@ -614,8 +686,9 @@ def user_details():
 def employee_checkin_status():  
     try:
         frappe.log_error('employee_checkin_status',frappe.form_dict)
-        employee = frappe.get_doc("Appe Employee",{"user_id":frappe.session.user})
-        data = frappe.get_list("Appy Check-in", filters=[["Appy Check-in","event_date","Timespan","today"],["employee","=",employee.get("name")]], fields=["*"])
+        erpnext_exists = get_apps()
+        employee = frappe.get_doc("Employee" if erpnext_exists else "Appe Employee",{"user_id":frappe.session.user})
+        data = frappe.get_list("Employee Checkin" if erpnext_exists else "Appy Check-in", filters=[["time","Timespan","today"],["employee","=",employee.get("name")]], fields=["*"])
         if data:
             frappe.response.message={
                 'status':True,
@@ -641,12 +714,13 @@ def employee_checkin_status():
 @frappe.whitelist()
 def employee_checkin():
     try:
-        # frappe.log_error('employee_checkin',frappe.form_dict)
-        employee = frappe.get_doc("Appe Employee",{"user_id":frappe.session.user})
-        newdoc= frappe.get_doc({'doctype':'Appy Check-in',
+        frappe.log_error('employee_checkin',frappe.form_dict)
+        erpnext_exists = get_apps()
+        employee = frappe.get_doc("Employee" if erpnext_exists else "Appe Employee",{"user_id":frappe.session.user})
+        newdoc= frappe.get_doc({'doctype': 'Employee Checkin' if erpnext_exists else 'Appy Check-in',
             'employee':employee.get('name'),
             'user':frappe.session.user,
-            'event_date':frappe.utils.now_datetime(),
+            'time':frappe.utils.now_datetime(),
             'device_ip':'',
             'log_type':frappe.form_dict.log_type,
             'latlong':frappe.form_dict.latlong,

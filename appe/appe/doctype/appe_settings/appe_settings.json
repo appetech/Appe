@@ -18,7 +18,9 @@
   "ios_onesignal_app_id",
   "onesignal_api_key",
   "map_setup_tab",
-  "google_map_api"
+  "google_map_api",
+  "form_tab",
+  "hide_column_break"
  ],
  "fields": [
   {
@@ -98,13 +100,25 @@
    "fieldtype": "Small Text",
    "label": "IOS OneSignal App Id",
    "max_height": "50px"
+  },
+  {
+   "fieldname": "form_tab",
+   "fieldtype": "Tab Break",
+   "label": "Form"
+  },
+  {
+   "default": "0",
+   "description": "hide column break in mobile form view",
+   "fieldname": "hide_column_break",
+   "fieldtype": "Check",
+   "label": "Hide Column Break"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2026-03-09 22:12:44.859683",
+ "modified": "2026-03-22 23:38:46.912169",
  "modified_by": "Administrator",
  "module": "Appe",
  "name": "Appe Settings",

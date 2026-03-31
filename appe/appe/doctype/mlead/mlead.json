@@ -6,6 +6,8 @@
  "engine": "InnoDB",
  "field_order": [
   "first_name",
+  "company",
+  "curreny_amount",
   "last_name",
   "fullname",
   "posting_date",
@@ -13,7 +15,6 @@
   "post_datetime",
   "age_int",
   "weight_float",
-  "curreny_amount",
   "total",
   "email",
   "profile_completed_percentage",
@@ -43,6 +44,7 @@
    "options": "Checkbox"
   },
   {
+   "depends_on": "eval:doc.first_name==\"\"",
    "fieldname": "last_name",
    "fieldtype": "Data",
    "label": "Last Name"
@@ -90,7 +92,8 @@
   {
    "fieldname": "curreny_amount",
    "fieldtype": "Currency",
-   "label": "Curreny amount"
+   "label": "Curreny amount",
+   "options": "Company:company:default_currency"
   },
   {
    "appe_field_formula": "age_int+weight_float+curreny_amount",
@@ -186,12 +189,18 @@
    "in_filter": 1,
    "in_standard_filter": 1,
    "label": "Status"
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "label": "Company",
+   "options": "Company"
   }
  ],
  "image_field": "attach_image",
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-12-02 09:09:19.752665",
+ "modified": "2026-03-22 22:36:24.281983",
  "modified_by": "Administrator",
  "module": "Appe",
  "name": "mlead",

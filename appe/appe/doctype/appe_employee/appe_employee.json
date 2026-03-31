@@ -19,7 +19,6 @@
   "parent_appe_employee",
   "appe_setting_tab",
   "checkin_mandatory",
-  "custom_checkin_mandatory",
   "enable_live_location_tracking"
  ],
  "fields": [
@@ -101,12 +100,6 @@
    "label": "Enable Live Location Tracking"
   },
   {
-   "default": "0",
-   "fieldname": "custom_checkin_mandatory",
-   "fieldtype": "Check",
-   "label": "custom_checkin_mandatory"
-  },
-  {
    "fieldname": "status",
    "fieldtype": "Select",
    "label": "Status",
@@ -123,7 +116,7 @@
  "index_web_pages_for_search": 1,
  "is_tree": 1,
  "links": [],
- "modified": "2026-02-26 23:26:18.702255",
+ "modified": "2026-03-24 22:22:12.821550",
  "modified_by": "Administrator",
  "module": "Appe",
  "name": "Appe Employee",

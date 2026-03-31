@@ -8,6 +8,7 @@
   "latitude",
   "longitude",
   "employee",
+  "employee_doctype",
   "battery_level",
   "gps",
   "wifi_status",
@@ -33,9 +34,9 @@
   },
   {
    "fieldname": "employee",
-   "fieldtype": "Link",
+   "fieldtype": "Dynamic Link",
    "label": "Employee",
-   "options": "Appe Employee"
+   "options": "employee_doctype"
   },
   {
    "fieldname": "battery_level",
@@ -92,11 +93,19 @@
    "fieldname": "timestamp",
    "fieldtype": "Data",
    "label": "Timestamp"
+  },
+  {
+   "default": "Appe Employee",
+   "fieldname": "employee_doctype",
+   "fieldtype": "Link",
+   "label": "Employee Doctype",
+   "link_filters": "[[\"DocType\",\"name\",\"in\",[\"Employee\",\"Appe Employee\"]]]",
+   "options": "DocType"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-08-08 17:46:41.822544",
+ "modified": "2026-03-25 05:38:51.569301",
  "modified_by": "Administrator",
  "module": "Appe",
  "name": "Employee Location",

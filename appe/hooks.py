@@ -9,8 +9,8 @@ app_license = "mit"
 # ------------------
 
 # required_apps = []
-# after_install = "appe.setup.after_install"
-# after_migrate = "appe.setup.after_install"
+after_install = "appe.setup.after_install.after_install"
+after_migrate = "appe.setup.after_install.after_install"
 # before_uninstall = "appe.setup.remove_custom_fields_from_appe"
 
 

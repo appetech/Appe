@@ -6,7 +6,7 @@
  "engine": "InnoDB",
  "field_order": [
   "employee",
-  "event_date",
+  "time",
   "device_id",
   "log_type",
   "latitude",
@@ -20,11 +20,6 @@
    "in_standard_filter": 1,
    "label": "Employee",
    "options": "Appe Employee"
-  },
-  {
-   "fieldname": "event_date",
-   "fieldtype": "Datetime",
-   "label": "Time"
   },
   {
    "fieldname": "log_type",
@@ -48,11 +43,16 @@
    "fieldname": "device_id",
    "fieldtype": "Data",
    "label": "Device Id"
+  },
+  {
+   "fieldname": "time",
+   "fieldtype": "Datetime",
+   "label": "Time"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-03-08 08:03:46.818870",
+ "modified": "2026-03-24 21:51:45.301166",
  "modified_by": "Administrator",
  "module": "Appe",
  "name": "Appy Check-in",
