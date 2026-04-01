@@ -2,11 +2,11 @@ name: CI
 
 on:
   push:
-    branches: [ develop ]
+    branches: [ master ]
   pull_request:
 
 concurrency:
-  group: develop-appe-${{ github.event.pull_request.number || github.ref }}
+  group: master-appe-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 jobs:
