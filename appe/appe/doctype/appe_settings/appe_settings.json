@@ -27,7 +27,7 @@
  ],
  "fields": [
   {
-   "default": "0",
+   "default": "1",
    "fieldname": "enable_checkin",
    "fieldtype": "Check",
    "label": "Enable Check-In"
@@ -50,19 +50,19 @@
    "label": "Mobile App Dashboard"
   },
   {
-   "default": "0",
+   "default": "1",
    "fieldname": "enable_approval_requests",
    "fieldtype": "Check",
    "label": "Enable Approval Requests"
   },
   {
-   "default": "0",
+   "default": "1",
    "fieldname": "enable_attendance",
    "fieldtype": "Check",
    "label": "Enable Attendance"
   },
   {
-   "default": "0",
+   "default": "1",
    "fieldname": "enable_leave_balance",
    "fieldtype": "Check",
    "label": "Enable Leave Balance"
@@ -124,7 +124,7 @@
    "label": "Hide Tab Break"
   },
   {
-   "default": "0",
+   "default": "1",
    "fieldname": "enable_home_tabs",
    "fieldtype": "Check",
    "label": "Enable Home Tabs"
@@ -141,7 +141,7 @@
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2026-05-03 16:46:22.366434",
+ "modified": "2026-05-03 22:00:54.796501",
  "modified_by": "Administrator",
  "module": "Appe",
  "name": "Appe Settings",

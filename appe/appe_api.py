@@ -836,7 +836,7 @@ def employee_checkin_status():
         frappe.log_error('employee_checkin_status',frappe.form_dict)
         erpnext_exists = get_apps()
         employee = frappe.get_doc("Employee" if erpnext_exists else "Appe Employee",{"user_id":frappe.session.user})
-        data = frappe.get_list("Employee Checkin" if erpnext_exists else "Appy Check-in", filters=[["time","Timespan","today"],["employee","=",employee.get("name")]], fields=["*"])
+        data = frappe.get_list("Employee Checkin" if erpnext_exists else "Appe Check-in", filters=[["time","Timespan","today"],["employee","=",employee.get("name")]], fields=["*"])
         if data:
             frappe.response.message={
                 'status':True,
@@ -865,7 +865,7 @@ def employee_checkin():
         frappe.log_error('employee_checkin',frappe.form_dict)
         erpnext_exists = get_apps()
         employee = frappe.get_doc("Employee" if erpnext_exists else "Appe Employee",{"user_id":frappe.session.user})
-        newdoc= frappe.get_doc({'doctype': 'Employee Checkin' if erpnext_exists else 'Appy Check-in',
+        newdoc= frappe.get_doc({'doctype': 'Employee Checkin' if erpnext_exists else 'Appe Check-in',
             'employee':employee.get('name'),
             'user':frappe.session.user,
             'time':frappe.utils.now_datetime(),

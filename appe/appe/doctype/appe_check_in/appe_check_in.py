@@ -5,5 +5,5 @@
 from frappe.model.document import Document
 
 
-class AppyCheckin(Document):
+class AppeCheckin(Document):
 	pass
