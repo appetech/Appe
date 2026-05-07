@@ -600,7 +600,7 @@ def get_dashboard_sections():
         results = []
         for section in app_sections:
             section_items = frappe.get_all('Mobile App Dashboard Items', filters={'parent': section.name}, fields=['*'])
-            results.append({'section_view': section.get('section_view'),'section_name': section.get('section_name'),'image': section.get('image'),'items': section_items})
+            results.append({'section_view': section.get('section_view'),'hide_section_name': section.get('hide_section_name'),'section_name': section.get('section_name'),'image': section.get('image'),'items': section_items})
         frappe.response.message={'status':True,'message':'','data':results}
         return
     except Exception as e:

@@ -6,6 +6,7 @@
  "engine": "InnoDB",
  "field_order": [
   "section_name",
+  "hide_section_name",
   "items",
   "status",
   "section_view",
@@ -52,12 +53,18 @@
    "fieldname": "sequence_id",
    "fieldtype": "Int",
    "label": "Sequence Id"
+  },
+  {
+   "default": "0",
+   "fieldname": "hide_section_name",
+   "fieldtype": "Check",
+   "label": "Hide Section Name"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
  "make_attachments_public": 1,
- "modified": "2026-05-03 12:59:13.682683",
+ "modified": "2026-05-07 09:00:44.145172",
  "modified_by": "Administrator",
  "module": "Appe",
  "name": "Mobile App Dashboard",
