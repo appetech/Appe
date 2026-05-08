@@ -1,14 +1,14 @@
 [project]
 name = "appe"
 authors = [
-    { name = "Kamesh", email = "kamesh@eactive.in"}
+    { name = "Kamesh", email = "kamesh@appetech.in"}
 ]
 description = "appe"
 requires-python = ">=3.10"
 readme = "README.md"
 dynamic = ["version"]
 dependencies = [
-    # "frappe>=13.0.0-dev,<=17.0.0-dev"
+    # "frappe>=13.0.0-dev,<=16.0.0-dev"
 ]
 
 [build-system]
