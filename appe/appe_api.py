@@ -256,6 +256,10 @@ def login_user(usr, pwd):
     user_exist = frappe.db.count("User",{'email': usr,'enabled':1})
     if user_exist > 0:
         userm = frappe.db.get_all('User', filters={'email': usr,'enabled':1}, fields=['name','email','username','full_name','user_image','mobile_no','location','gender','language','time_zone','enabled','user_type'])
+    elif frappe.db.count("User",{'username': usr,'enabled':1}):
+        userm = frappe.db.get_all('User', filters={'username': usr,'enabled':1}, fields=['name','email','username','full_name','user_image','mobile_no','location','gender','language','time_zone','enabled','user_type'])
+
+    if userm:
         user_email = userm[0].name
         try:
             check_password(user_email, pwd)
@@ -295,6 +299,7 @@ def login_user(usr, pwd):
                 "data":{
                     "token" :f"token {api_key}:{api_secret}",
                     "user": employee_data[0].user_id,
+                    "email": userm[0].email,
                     "settings": settings,
                     "userData": userm[0],
                     "erpnext_exists": get_apps()
@@ -311,6 +316,7 @@ def login_user(usr, pwd):
                 "data":{
                     "token" :f"token {api_key}:{api_secret}",
                     "user": userm[0].name,
+                    "email": userm[0].email,
                     "settings": settings,
                     "userData": userm[0],
                 }
@@ -803,7 +809,7 @@ def employee_details():
 @frappe.whitelist()
 def user_details():
     try:
-        user = frappe.db.get_all('User', filters={'email': frappe.session.user}, fields=['name','email','username','full_name','user_image','mobile_no','location','gender','language','time_zone','enabled','user_type'])
+        user = frappe.db.get_all('User', filters={'name': frappe.session.user}, fields=['name','email','username','full_name','user_image','mobile_no','location','gender','language','time_zone','enabled','user_type'])
         
         if user:
             erpnext_exists = get_apps()
@@ -953,4 +959,5 @@ def get_appe_posts(limit_start: int = 0, limit_page_length: int = 10):
         return {"status": True, "data": posts}
     except Exception as e:
         return {"status": False, "message": str(e)}
+
 

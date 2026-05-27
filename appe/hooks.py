@@ -1,8 +1,8 @@
 app_name = "appe"
 app_title = "appe"
-app_publisher = "Kamesh"
-app_description = "appe"
-app_email = "kamesh@appetech.in"
+app_publisher = "Appe technologies"
+app_description = "Appe  is a Frappe Mobile App that provides a seamless and efficient way to manage your business operations on the go. With its user-friendly interface and powerful features, Appe allows you to access and control your data, collaborate with your team, and stay connected with your customers from anywhere, at any time."
+app_email = "info@appetech.in"
 app_license = "mit"
 
 # Apps
@@ -10,8 +10,9 @@ app_license = "mit"
 
 # required_apps = []
 after_install = "appe.setup.after_install.after_install"
+after_uninstall = "appe.setup.uninstall.after_uninstall"
 # after_migrate = "appe.setup.after_install.after_install"
-# before_uninstall = "appe.setup.remove_custom_fields_from_appe"
+# before_uninstall = "appe.setup.uninstall.after_uninstall"
 
 
 # Each item in the list will be shown as an app in the apps page
