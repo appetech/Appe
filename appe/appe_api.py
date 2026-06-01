@@ -722,7 +722,7 @@ def leave_balance():
                     leave_type,
                     today()
                 ) if get_leave_balance_on else (total - used)
-                frappe.log_error("leave_balance", remaining)
+                # frappe.log_error("leave_balance", remaining)
 
                 data.append({
                     "type": leave_type,
@@ -843,10 +843,9 @@ def user_details():
 @frappe.whitelist()
 def employee_checkin_status():  
     try:
-        frappe.log_error('employee_checkin_status',frappe.form_dict)
         erpnext_exists = get_apps()
         employee = frappe.get_doc("Employee" if erpnext_exists else "Appe Employee",{"user_id":frappe.session.user})
-        data = frappe.get_list("Employee Checkin" if erpnext_exists else "Appe Check-in", filters=[["time","Timespan","today"],["employee","=",employee.get("name")]], fields=["*"])
+        data = frappe.get_list("Employee Checkin" if erpnext_exists else "Appe Check-in", filters=[["time","Timespan","today"],["employee","=",employee.get("name")]], fields=["*"], order_by="time desc", limit_page_length=1)
         if data:
             frappe.response.message={
                 'status':True,

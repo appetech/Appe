@@ -1,0 +1,237 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "creation": "2026-05-28 19:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "enabled",
+  "section_provider",
+  "provider",
+  "model",
+  "column_break_provider",
+  "api_key",
+  "api_base_url",
+  "section_behavior",
+  "system_prompt",
+  "temperature",
+  "max_tokens",
+  "column_break_behavior",
+  "max_tool_iterations",
+  "request_timeout",
+  "enable_streaming",
+  "section_capabilities",
+  "allow_create_doctype",
+  "allow_create_report",
+  "allow_create_chart",
+  "allow_create_dashboard",
+  "column_break_capabilities",
+  "allow_create_number_card",
+  "allow_query_data",
+  "allow_run_report",
+  "allow_create_workspace",
+  "section_safety",
+  "allowed_roles",
+  "blocked_doctypes",
+  "max_query_rows"
+ ],
+ "fields": [
+  {
+   "default": "1",
+   "fieldname": "enabled",
+   "fieldtype": "Check",
+   "label": "Enable Appe Buddy"
+  },
+  {
+   "fieldname": "section_provider",
+   "fieldtype": "Section Break",
+   "label": "AI Provider"
+  },
+  {
+   "default": "OpenAI",
+   "fieldname": "provider",
+   "fieldtype": "Select",
+   "label": "Provider",
+   "options": "OpenAI\nGemini\nAnthropic\nOpenAI Compatible",
+   "reqd": 1
+  },
+  {
+   "description": "Leave blank to auto-pick the default model for the selected provider (gpt-4o-mini / claude-3-5-sonnet / gemini-1.5-flash).",
+   "fieldname": "model",
+   "fieldtype": "Autocomplete",
+   "label": "Model"
+  },
+  {
+   "fieldname": "column_break_provider",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "api_key",
+   "fieldtype": "Password",
+   "label": "API Key",
+   "reqd": 1
+  },
+  {
+   "description": "Override base URL (e.g. for Azure OpenAI / self-hosted / Ollama). Leave blank for defaults.",
+   "fieldname": "api_base_url",
+   "fieldtype": "Data",
+   "label": "API Base URL"
+  },
+  {
+   "fieldname": "section_behavior",
+   "fieldtype": "Section Break",
+   "label": "Behavior"
+  },
+  {
+   "default": "You are Appe Buddy, the helpful AI inside the Appe Frappe app. You can read data, create DocTypes, Reports, Charts and Dashboards on behalf of the logged-in user. Always confirm destructive actions and prefer concise, mobile-friendly answers.",
+   "fieldname": "system_prompt",
+   "fieldtype": "Long Text",
+   "label": "System Prompt"
+  },
+  {
+   "default": "0.2",
+   "fieldname": "temperature",
+   "fieldtype": "Float",
+   "label": "Temperature",
+   "precision": "2"
+  },
+  {
+   "default": "2048",
+   "fieldname": "max_tokens",
+   "fieldtype": "Int",
+   "label": "Max Output Tokens"
+  },
+  {
+   "fieldname": "column_break_behavior",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "8",
+   "description": "Max number of tool-calling rounds per request",
+   "fieldname": "max_tool_iterations",
+   "fieldtype": "Int",
+   "label": "Max Tool Iterations"
+  },
+  {
+   "default": "60",
+   "description": "Timeout for AI provider HTTP calls in seconds",
+   "fieldname": "request_timeout",
+   "fieldtype": "Int",
+   "label": "Request Timeout (sec)"
+  },
+  {
+   "default": "0",
+   "fieldname": "enable_streaming",
+   "fieldtype": "Check",
+   "label": "Enable Streaming"
+  },
+  {
+   "fieldname": "section_capabilities",
+   "fieldtype": "Section Break",
+   "label": "Capabilities"
+  },
+  {
+   "default": "1",
+   "fieldname": "allow_create_doctype",
+   "fieldtype": "Check",
+   "label": "Allow Create DocType"
+  },
+  {
+   "default": "1",
+   "fieldname": "allow_create_report",
+   "fieldtype": "Check",
+   "label": "Allow Create Report"
+  },
+  {
+   "default": "1",
+   "fieldname": "allow_create_chart",
+   "fieldtype": "Check",
+   "label": "Allow Create Dashboard Chart"
+  },
+  {
+   "default": "1",
+   "fieldname": "allow_create_dashboard",
+   "fieldtype": "Check",
+   "label": "Allow Create Dashboard"
+  },
+  {
+   "fieldname": "column_break_capabilities",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "1",
+   "fieldname": "allow_create_number_card",
+   "fieldtype": "Check",
+   "label": "Allow Create Number Card"
+  },
+  {
+   "default": "1",
+   "fieldname": "allow_query_data",
+   "fieldtype": "Check",
+   "label": "Allow Query Data"
+  },
+  {
+   "default": "1",
+   "fieldname": "allow_run_report",
+   "fieldtype": "Check",
+   "label": "Allow Run Report"
+  },
+  {
+   "default": "0",
+   "fieldname": "allow_create_workspace",
+   "fieldtype": "Check",
+   "label": "Allow Create Workspace"
+  },
+  {
+   "fieldname": "section_safety",
+   "fieldtype": "Section Break",
+   "label": "Safety"
+  },
+  {
+   "default": "System Manager",
+   "description": "Comma separated list of roles allowed to use Appe Buddy",
+   "fieldname": "allowed_roles",
+   "fieldtype": "Small Text",
+   "label": "Allowed Roles"
+  },
+  {
+   "description": "Comma separated list of DocTypes the AI is NOT allowed to read/modify",
+   "fieldname": "blocked_doctypes",
+   "fieldtype": "Small Text",
+   "label": "Blocked DocTypes"
+  },
+  {
+   "default": "200",
+   "fieldname": "max_query_rows",
+   "fieldtype": "Int",
+   "label": "Max Rows per Query"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "issingle": 1,
+ "links": [],
+ "modified": "2026-05-28 20:15:00.000000",
+ "modified_by": "Administrator",
+ "module": "Appe",
+ "name": "Appe Buddy Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

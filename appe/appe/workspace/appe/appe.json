@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"id\":\"1Lt-8WmDmC\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Appe</span>\",\"col\":12}},{\"id\":\"_iqTcM5pw1\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Mobile App Dashboard\",\"col\":3}},{\"id\":\"lOp5FZP3rF\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Mobile App Module\",\"col\":3}},{\"id\":\"uDji_OBaMp\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Appe Report\",\"col\":3}},{\"id\":\"cWTsLR11T7\",\"type\":\"card\",\"data\":{\"card_name\":\"Shortcut\",\"col\":4}},{\"id\":\"iEi4MVH20R\",\"type\":\"card\",\"data\":{\"card_name\":\"Dashboard\",\"col\":4}}]",
+ "content": "[{\"id\":\"1Lt-8WmDmC\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Appe</span>\",\"col\":12}},{\"id\":\"_iqTcM5pw1\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Mobile App Dashboard\",\"col\":3}},{\"id\":\"lOp5FZP3rF\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Mobile App Module\",\"col\":3}},{\"id\":\"uDji_OBaMp\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Appe Report\",\"col\":3}},{\"id\":\"BUDDY_HDR\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">\\u2728 Appe Buddy</span> &nbsp;<span class=\\\"text-muted small\\\">AI assistant for Frappe &amp; ERPNext</span>\",\"col\":12}},{\"id\":\"BUDDY_OPEN\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Open Appe Buddy\",\"col\":3}},{\"id\":\"BUDDY_CHATS\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Buddy Chats\",\"col\":3}},{\"id\":\"BUDDY_SET\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Appe Buddy Settings\",\"col\":3}},{\"id\":\"BUDDY_TIP\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"text-muted small\\\">\\ud83d\\udca1 Tip: open any record and tap the magic button at the bottom-right to ask Appe Buddy about <b>this</b> record. It can also build Reports, Charts, Dashboards and new DocTypes on the fly.</span>\",\"col\":12}},{\"id\":\"cWTsLR11T7\",\"type\":\"card\",\"data\":{\"card_name\":\"Shortcut\",\"col\":4}},{\"id\":\"iEi4MVH20R\",\"type\":\"card\",\"data\":{\"card_name\":\"Dashboard\",\"col\":4}},{\"id\":\"BUDDY_CARD\",\"type\":\"card\",\"data\":{\"card_name\":\"Appe Buddy\",\"col\":4}}]",
  "creation": "2025-08-11 13:38:31.385313",
  "custom_blocks": [],
  "docstatus": 0,
@@ -120,9 +120,58 @@
    "link_type": "DocType",
    "onboard": 0,
    "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Appe Buddy",
+   "link_count": 4,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Open Appe Buddy",
+   "link_count": 0,
+   "link_to": "appe-buddy",
+   "link_type": "Page",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Appe Buddy Settings",
+   "link_count": 0,
+   "link_to": "Appe Buddy Settings",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Appe Buddy Conversation",
+   "link_count": 0,
+   "link_to": "Appe Buddy Conversation",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Appe Buddy Tool Log",
+   "link_count": 0,
+   "link_to": "Appe Buddy Tool Log",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
   }
  ],
- "modified": "2026-03-08 08:06:36.724483",
+ "modified": "2026-05-28 21:10:00.000000",
  "modified_by": "Administrator",
  "module": "Appe",
  "name": "Appe",
@@ -162,6 +211,27 @@
    "doc_view": "List",
    "label": "Mobile App Screen",
    "link_to": "Appe Screen",
+   "type": "DocType"
+  },
+  {
+   "color": "Blue",
+   "doc_view": "",
+   "label": "Open Appe Buddy",
+   "link_to": "appe-buddy",
+   "type": "Page"
+  },
+  {
+   "color": "Blue",
+   "doc_view": "",
+   "label": "Appe Buddy Settings",
+   "link_to": "Appe Buddy Settings",
+   "type": "DocType"
+  },
+  {
+   "color": "Blue",
+   "doc_view": "List",
+   "label": "Buddy Chats",
+   "link_to": "Appe Buddy Conversation",
    "type": "DocType"
   }
  ],

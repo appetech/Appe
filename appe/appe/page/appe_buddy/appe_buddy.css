@@ -1,0 +1,397 @@
+/* Appe Buddy chat page */
+
+.appe-buddy-page-wrapper {
+	padding-top: 6px !important;
+	padding-bottom: 6px !important;
+}
+.appe-buddy-page-wrapper .page-content,
+.appe-buddy-page-wrapper .page-body {
+	padding-top: 0 !important;
+	padding-bottom: 0 !important;
+}
+.page-head{
+	display: none;
+}
+
+.appe-buddy-shell {
+	display: grid;
+	grid-template-columns: 300px 1fr;
+	height: calc(100vh - 130px);
+	min-height: 560px;
+	background: var(--card-bg, #fff);
+	border: 1px solid var(--border-color, #e9ecef);
+	border-radius: 10px;
+	overflow: hidden;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+/* Disabled / setup-needed state */
+.appe-buddy-disabled-overlay {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: calc(100vh - 200px);
+	min-height: 500px;
+}
+
+.appe-buddy-disabled-card {
+	max-width: 480px;
+	text-align: center;
+	padding: 32px 28px;
+	background: var(--card-bg, #fff);
+	border: 1px solid var(--border-color, #e9ecef);
+	border-radius: 12px;
+	box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+}
+
+.appe-buddy-disabled-icon {
+	font-size: 48px;
+	color: var(--text-muted, #8d99a6);
+	margin-bottom: 14px;
+}
+
+.appe-buddy-disabled-card h3 { margin-top: 0; }
+.appe-buddy-disabled-card .actions { margin-top: 18px; display: inline-flex; gap: 8px; }
+
+.appe-buddy-sidebar {
+	border-right: 1px solid var(--border-color, #e9ecef);
+	background: var(--bg-light-gray, #f8f9fa);
+	display: flex;
+	flex-direction: column;
+	min-height: 0;
+}
+
+.appe-buddy-sidebar-head {
+	padding: 12px;
+	border-bottom: 1px solid var(--border-color, #e9ecef);
+}
+
+.appe-buddy-search {
+	font-size: 12px;
+}
+
+.appe-buddy-conv-list {
+	overflow-y: auto;
+	flex: 1;
+	min-height: 0;
+}
+
+.appe-buddy-conv-group {
+	font-size: 11px;
+	text-transform: uppercase;
+	letter-spacing: 0.4px;
+	color: var(--text-muted, #8d99a6);
+	padding: 10px 12px 4px;
+}
+
+.appe-buddy-conv-row {
+	padding: 9px 12px;
+	border-bottom: 1px solid var(--border-color, #f1f3f5);
+	cursor: pointer;
+	position: relative;
+}
+
+.appe-buddy-conv-row:hover {
+	background: rgba(0, 0, 0, 0.03);
+}
+
+.appe-buddy-conv-row.active {
+	background: var(--control-bg, #ecf3ff);
+}
+
+.appe-buddy-conv-title {
+	font-weight: 500;
+	color: var(--text-color, #2d2d2d);
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	font-size: 13px;
+}
+
+.appe-buddy-conv-meta {
+	font-size: 11px;
+	color: var(--text-muted, #8d99a6);
+	margin-top: 2px;
+}
+
+.appe-buddy-conv-actions {
+	position: absolute;
+	right: 8px;
+	top: 8px;
+	display: none;
+	gap: 8px;
+}
+
+.appe-buddy-conv-row:hover .appe-buddy-conv-actions {
+	display: inline-flex;
+}
+
+.appe-buddy-conv-actions a {
+	cursor: pointer;
+	font-size: 12px;
+}
+
+.appe-buddy-main {
+	display: flex;
+	flex-direction: column;
+	min-height: 0;
+}
+
+.appe-buddy-header {
+	padding: 10px 16px;
+	border-bottom: 1px solid var(--border-color, #e9ecef);
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	background: var(--card-bg, #fff);
+	gap: 12px;
+}
+
+.appe-buddy-header-left {
+	flex: 1;
+	min-width: 0;
+}
+
+.appe-buddy-header-title {
+	font-size: 14px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.appe-buddy-header-right {
+	display: inline-flex;
+	gap: 6px;
+	align-items: center;
+}
+
+.appe-buddy-token-badge {
+	background: var(--bg-light-gray, #f1f3f5);
+	border: 1px solid var(--border-color, #e9ecef);
+	padding: 2px 8px;
+	border-radius: 10px;
+	font-size: 11px;
+}
+
+.appe-buddy-token-badge:empty { display: none; }
+
+.appe-buddy-messages {
+	flex: 1;
+	overflow-y: auto;
+	padding: 16px;
+	background: var(--bg-color, #fafbfc);
+	min-height: 0;
+}
+
+.appe-buddy-msg {
+	margin-bottom: 12px;
+	max-width: 84%;
+}
+
+.appe-buddy-msg-user {
+	margin-left: auto;
+	text-align: right;
+}
+
+.appe-buddy-msg-user .appe-buddy-msg-bubble {
+	background: var(--primary, #1976d2);
+	color: #fff;
+	border-radius: 14px 14px 4px 14px;
+}
+
+.appe-buddy-msg-assistant .appe-buddy-msg-bubble {
+	background: var(--card-bg, #fff);
+	border: 1px solid var(--border-color, #e9ecef);
+	border-radius: 14px 14px 14px 4px;
+}
+
+.appe-buddy-msg-bubble {
+	display: inline-block;
+	padding: 10px 14px;
+	white-space: normal;
+	word-wrap: break-word;
+	line-height: 1.55;
+	font-size: 13px;
+	text-align: left;
+}
+
+.appe-buddy-msg-bubble pre {
+	background: rgba(0, 0, 0, 0.04);
+	padding: 8px 10px;
+	border-radius: 6px;
+	white-space: pre-wrap;
+	margin: 6px 0;
+	font-size: 12px;
+}
+
+.appe-buddy-msg-bubble code {
+	background: rgba(0, 0, 0, 0.06);
+	padding: 1px 5px;
+	border-radius: 4px;
+	font-size: 12.5px;
+}
+
+.appe-buddy-msg-bubble ul,
+.appe-buddy-msg-bubble ol { padding-left: 22px; margin: 4px 0; }
+
+.appe-buddy-msg-bubble h3 { font-size: 16px; margin: 8px 0 4px; }
+.appe-buddy-msg-bubble h4 { font-size: 14px; margin: 6px 0 3px; }
+.appe-buddy-msg-bubble h5 { font-size: 13px; margin: 4px 0 2px; }
+
+.appe-buddy-md-table {
+	width: 100%;
+	border-collapse: collapse;
+	margin: 8px 0;
+	font-size: 12px;
+}
+
+.appe-buddy-md-table th,
+.appe-buddy-md-table td {
+	border: 1px solid var(--border-color, #e9ecef);
+	padding: 4px 8px;
+	text-align: left;
+}
+
+.appe-buddy-md-table th { background: var(--bg-light-gray, #f8f9fa); }
+
+.appe-buddy-msg-meta {
+	font-size: 10.5px;
+	color: var(--text-muted, #8d99a6);
+	margin-top: 4px;
+}
+
+.appe-buddy-msg-meta .js-copy { cursor: pointer; }
+
+.appe-buddy-msg-tool {
+	font-size: 12px;
+	margin: 6px 0;
+	max-width: 100%;
+}
+
+.appe-buddy-tool-line { margin-bottom: 4px; }
+
+.appe-buddy-tool-chip {
+	background: var(--bg-light-gray, #f1f3f5);
+	border: 1px solid var(--border-color, #e9ecef);
+	color: var(--text-color, #2d2d2d);
+	padding: 2px 8px;
+	border-radius: 12px;
+	font-size: 11.5px;
+}
+
+.appe-buddy-tool-args { margin-top: 4px; }
+.appe-buddy-tool-args pre,
+.appe-buddy-tool-raw pre {
+	background: rgba(0, 0, 0, 0.04);
+	padding: 6px 8px;
+	border-radius: 4px;
+	font-size: 11px;
+	white-space: pre-wrap;
+	max-height: 260px;
+	overflow: auto;
+}
+
+.appe-buddy-result-table {
+	margin: 4px 0 8px;
+	background: var(--card-bg, #fff);
+	border: 1px solid var(--border-color, #e9ecef);
+	border-radius: 6px;
+	padding: 6px 8px;
+}
+
+.appe-buddy-result-table table { font-size: 12px; }
+
+.appe-buddy-input {
+	display: flex;
+	gap: 8px;
+	padding: 10px 12px;
+	border-top: 1px solid var(--border-color, #e9ecef);
+	background: var(--card-bg, #fff);
+	align-items: flex-end;
+}
+
+.appe-buddy-textarea {
+	flex: 1;
+	resize: none;
+	font-size: 13px;
+	min-height: 38px;
+	max-height: 200px;
+	overflow-y: auto;
+}
+
+.appe-buddy-input-actions {
+	display: inline-flex;
+	gap: 6px;
+	align-items: center;
+}
+
+.appe-buddy-input-actions .btn { padding: 4px 10px; }
+
+.js-mic.recording {
+	background: var(--red, #e53935);
+	color: #fff;
+	border-color: var(--red, #e53935);
+	animation: appe-buddy-pulse 1s infinite;
+}
+
+@keyframes appe-buddy-pulse {
+	0% { box-shadow: 0 0 0 0 rgba(229, 57, 53, 0.5); }
+	70% { box-shadow: 0 0 0 8px rgba(229, 57, 53, 0); }
+	100% { box-shadow: 0 0 0 0 rgba(229, 57, 53, 0); }
+}
+
+.appe-buddy-foot {
+	padding: 6px 12px 10px;
+	background: var(--card-bg, #fff);
+}
+
+.appe-buddy-empty {
+	text-align: center;
+	padding: 30px 16px;
+}
+
+.appe-buddy-empty-icon {
+	font-size: 38px;
+	color: var(--primary, #4f8cff);
+	margin-bottom: 10px;
+}
+
+.appe-buddy-suggestion-groups {
+	margin-top: 14px;
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 12px;
+	text-align: left;
+}
+
+.appe-buddy-suggestion-group {
+	background: var(--card-bg, #fff);
+	border: 1px solid var(--border-color, #e9ecef);
+	border-radius: 8px;
+	padding: 10px 12px;
+}
+
+.appe-buddy-suggestion-title {
+	font-weight: 600;
+	font-size: 13px;
+	margin-bottom: 6px;
+	color: var(--text-color, #2d2d2d);
+}
+
+.appe-buddy-suggestion-chips {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 5px;
+}
+
+.appe-buddy-suggestion {
+	font-size: 11.5px;
+	white-space: normal;
+	text-align: left;
+}
+
+@media (max-width: 768px) {
+	.appe-buddy-shell { grid-template-columns: 0 1fr; }
+	.appe-buddy-sidebar { display: none; }
+	.appe-buddy-suggestion-groups { grid-template-columns: 1fr; }
+}

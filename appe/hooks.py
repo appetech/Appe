@@ -16,22 +16,23 @@ after_uninstall = "appe.setup.uninstall.after_uninstall"
 
 
 # Each item in the list will be shown as an app in the apps page
-# add_to_apps_screen = [
-# 	{
-# 		"name": "appe",
-# 		"logo": "/assets/appe/logo.png",
-# 		"title": "appe",
-# 		"route": "/appe",
-# 		"has_permission": "appe.api.permission.has_app_permission"
-# 	}
-# ]
+add_to_apps_screen = [
+	{
+		"name": "appe",
+		"logo": "/assets/appe/images/appe_logo.png",
+		"title": "Appe Frappe Mobile App",
+		"route": "/appe",
+		# "has_permission": "appe.api.permission.has_app_permission"
+	}
+]
 
 # Includes in <head>
 # ------------------
 
 # include js, css files in header of desk.html
-# app_include_css = "/assets/appe/css/appe.css"
-# app_include_js = "/assets/appe/js/appe.js"
+
+app_include_css = ["appe_buddy.bundle.css"]
+app_include_js = ["appe_buddy_panel.bundle.js"]
 
 # include js, css files in header of web template
 # web_include_css = "/assets/appe/css/appe.css"
