@@ -1,0 +1,18 @@
+{
+ "app": "appe",
+ "docstatus": 0,
+ "doctype": "Desktop Icon",
+ "hidden": 0,
+ "icon_type": "App",
+ "idx": 0,
+ "label": "Appe",
+ "link": "/desk/appe",
+ "link_type": "External",
+ "logo_url": "/assets/appe/images/appe_logo.png",
+ "modified_by": "Administrator",
+ "name": "Appe",
+ "owner": "Administrator",
+ "restrict_removal": 0,
+ "roles": [],
+ "standard": 1
+}

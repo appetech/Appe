@@ -1,9 +1,10 @@
 app_name = "appe"
-app_title = "appe"
-app_publisher = "Appe technologies"
+app_title = "Appe Mobile App"
+app_publisher = "Appe Technologies"
 app_description = "Appe  is a Frappe Mobile App that provides a seamless and efficient way to manage your business operations on the go. With its user-friendly interface and powerful features, Appe allows you to access and control your data, collaborate with your team, and stay connected with your customers from anywhere, at any time."
 app_email = "info@appetech.in"
 app_license = "mit"
+app_home = "/desk/appe"
 
 # Apps
 # ------------------
@@ -11,7 +12,6 @@ app_license = "mit"
 # required_apps = []
 after_install = "appe.setup.after_install.after_install"
 after_uninstall = "appe.setup.uninstall.after_uninstall"
-# after_migrate = "appe.setup.after_install.after_install"
 # before_uninstall = "appe.setup.uninstall.after_uninstall"
 
 
@@ -20,8 +20,8 @@ add_to_apps_screen = [
 	{
 		"name": "appe",
 		"logo": "/assets/appe/images/appe_logo.png",
-		"title": "Appe Frappe Mobile App",
-		"route": "/appe",
+		"title": "Appe Mobile App",
+		"route": "/desk/appe",
 		# "has_permission": "appe.api.permission.has_app_permission"
 	}
 ]
