@@ -10,6 +10,7 @@
   "enable_checkin_with_faceid",
   "enable_live_location_tracking",
   "enable_home_tabs",
+  "home_screen_header_icon",
   "mobile_app_dashboard_tab",
   "enable_approval_requests",
   "enable_attendance",
@@ -135,15 +136,20 @@
    "fieldtype": "Text",
    "label": "Site Name",
    "max_height": "35px"
+  },
+  {
+   "fieldname": "home_screen_header_icon",
+   "fieldtype": "Attach",
+   "label": "Home Screen Header Icon"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2026-05-03 22:00:54.796501",
+ "modified": "2026-06-08 18:43:24.342646",
  "modified_by": "Administrator",
- "module": "Appe",
+ "module": "appe",
  "name": "Appe Settings",
  "owner": "Administrator",
  "permissions": [
