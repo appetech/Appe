@@ -1,0 +1,110 @@
+{
+ "actions": [],
+ "allow_bulk_edit": 1,
+ "allow_rename": 1,
+ "creation": "2026-06-14 09:19:22.667996",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "column_fieldname",
+  "column_label",
+  "position",
+  "color",
+  "color_with_condition",
+  "is_bold",
+  "its_first_row_item",
+  "hide_on_first_row",
+  "icon",
+  "font_size"
+ ],
+ "fields": [
+  {
+   "fieldname": "column_fieldname",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_preview": 1,
+   "label": "Column Fieldname",
+   "reqd": 1,
+   "sticky": 1
+  },
+  {
+   "fieldname": "position",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_preview": 1,
+   "label": "Position",
+   "options": "\nLeft\nRight\nCenter"
+  },
+  {
+   "fieldname": "color",
+   "fieldtype": "Color",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Color"
+  },
+  {
+   "fieldname": "color_with_condition",
+   "fieldtype": "Long Text",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Color With Condition",
+   "max_height": "50px"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_bold",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
+   "label": "Is Bold"
+  },
+  {
+   "default": "0",
+   "fieldname": "its_first_row_item",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Its First Row Item"
+  },
+  {
+   "fieldname": "icon",
+   "fieldtype": "Attach Image",
+   "label": "Icon"
+  },
+  {
+   "fieldname": "font_size",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Font Size",
+   "options": "\nSmall\nMedium\nLarge"
+  },
+  {
+   "fieldname": "column_label",
+   "fieldtype": "Data",
+   "label": "Column Label"
+  },
+  {
+   "default": "0",
+   "fieldname": "hide_on_first_row",
+   "fieldtype": "Check",
+   "label": "Hide On First Row"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2026-06-14 09:29:47.161348",
+ "modified_by": "Administrator",
+ "module": "appe",
+ "name": "Appe Report Column",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}

@@ -1,0 +1,66 @@
+.employee-tracking-page{
+    padding:15px;
+}
+
+.tracking-filters{
+    display:flex;
+    gap:10px;
+    margin-bottom:15px;
+}
+
+.tracking-summary{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:10px;
+    margin-bottom:15px;
+}
+
+.tracking-card{
+    background:white;
+    border-radius:12px;
+    padding:15px;
+    box-shadow:0 2px 8px rgba(0,0,0,.08);
+}
+
+.tracking-card .label{
+    font-size:12px;
+    color:#666;
+}
+
+.tracking-card div:last-child{
+    font-size:22px;
+    font-weight:600;
+}
+
+.tracking-content{
+    display:flex;
+    gap:15px;
+}
+
+#tracking_map{
+    width:70%;
+    height:700px;
+    border-radius:12px;
+    overflow:hidden;
+}
+
+#timeline{
+    width:30%;
+    background:white;
+    overflow:auto;
+    height:700px;
+    padding:15px;
+    border-radius:12px;
+}
+.timeline-item{
+    border-left:3px solid #111;
+    padding-left:12px;
+    margin-bottom:20px;
+}
+.timeline-time{
+    font-size:12px;
+    color:#777;
+}
+.timeline-title{
+    font-weight:600;
+}

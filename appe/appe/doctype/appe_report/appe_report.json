@@ -10,11 +10,14 @@
   "third_party_report_name",
   "report",
   "report_name",
-  "filters",
+  "orientation",
+  "column_break_pywq",
   "disabled",
   "print_format",
-  "orientation",
-  "description"
+  "description",
+  "section_break_lyus",
+  "filters",
+  "column"
  ],
  "fields": [
   {
@@ -77,14 +80,28 @@
    "fieldname": "third_party_report_name",
    "fieldtype": "Autocomplete",
    "label": "Third Party Report Name"
+  },
+  {
+   "fieldname": "column_break_pywq",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_lyus",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column",
+   "fieldtype": "Table",
+   "label": "Column",
+   "options": "Appe Report Column"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-03-08 10:15:38.788480",
+ "modified": "2026-06-14 09:25:38.391756",
  "modified_by": "Administrator",
- "module": "Appe",
+ "module": "appe",
  "name": "Appe Report",
  "naming_rule": "By fieldname",
  "owner": "Administrator",

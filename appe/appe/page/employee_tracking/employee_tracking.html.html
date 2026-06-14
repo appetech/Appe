@@ -1,0 +1,53 @@
+<div class="employee-tracking-page">
+
+    <div class="tracking-filters">
+
+        <select id="employee"></select>
+
+        <input
+            type="date"
+            id="tracking_date"
+        />
+
+        <button
+            class="btn btn-primary"
+            id="load_tracking"
+        >
+            Load
+        </button>
+
+    </div>
+
+    <div class="tracking-summary">
+
+        <div class="tracking-card">
+            <div class="label">Distance</div>
+            <div id="distance">0 KM</div>
+        </div>
+
+        <div class="tracking-card">
+            <div class="label">Activities</div>
+            <div id="activities">0</div>
+        </div>
+
+        <div class="tracking-card">
+            <div class="label">GPS Points</div>
+            <div id="points">0</div>
+        </div>
+
+        <div class="tracking-card">
+            <div class="label">Working Hours</div>
+            <div id="working_hours">0</div>
+        </div>
+
+    </div>
+
+    <div class="tracking-content">
+
+        <div id="tracking_map"></div>
+
+        <div id="timeline"></div>
+
+    </div>
+
+</div>

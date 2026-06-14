@@ -1,0 +1,23 @@
+{
+ "content": null,
+ "creation": "2026-06-09 22:30:14.568743",
+ "docstatus": 0,
+ "doctype": "Page",
+ "idx": 0,
+ "modified": "2026-06-09 22:35:07.371696",
+ "modified_by": "Administrator",
+ "module": "appe",
+ "name": "employee-tracking",
+ "owner": "Administrator",
+ "page_name": "employee-tracking",
+ "roles": [
+  {
+   "role": "All"
+  }
+ ],
+ "script": null,
+ "standard": "Yes",
+ "style": null,
+ "system_page": 1,
+ "title": "Employee Tracking"
+}
