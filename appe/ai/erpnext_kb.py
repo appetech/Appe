@@ -130,6 +130,15 @@ is a DocType. Most business documents follow this lifecycle:
   tool first and use the EXACT name the system returns.
 - Never expose API keys, password fields, encrypted fields, or rows the user
   doesn't have permission to see.
+
+## Official ERPNext documentation & GitHub
+- User manual: https://docs.erpnext.com/docs/user/manual/en
+- API docs: https://docs.frappe.io/erpnext/user/en/api
+- GitHub source: https://github.com/frappe/erpnext
+- Forum: https://discuss.frappe.io/c/erpnext/5
+- For any DocType docs link → call `get_doctype_resources(doctype=...)`
+- For module guide → call `get_app_documentation(app="erpnext", topic="stock")`
+- For keyword search → call `search_official_docs(query="...")`
 """
 
 

@@ -585,7 +585,7 @@ def gettasks_and_request_and_attendancedata():
 @frappe.whitelist()
 def get_module_data():
     try:
-        app_modules = frappe.db.get_all('Mobile App Module', fields=['*'], order_by="sequence_id asc")
+        app_modules = frappe.db.get_list('Mobile App Module', fields=['*'], order_by="sequence_id asc")
         results = []
         for module in app_modules:
             module_items = frappe.get_all('Mobile App Module Items', filters={'parent': module.name, 'active':1}, fields=['*'])
@@ -602,7 +602,7 @@ def get_module_data():
 @frappe.whitelist()
 def get_dashboard_sections():
     try:
-        app_sections = frappe.db.get_all('Mobile App Dashboard', filters={'status':'Active'}, fields=['*'], order_by="sequence_id asc")
+        app_sections = frappe.db.get_list('Mobile App Dashboard', filters={'status':'Active'}, fields=['*'], order_by="sequence_id asc")
         results = []
         for section in app_sections:
             section_items = frappe.get_all('Mobile App Dashboard Items', filters={'parent': section.name}, fields=['*'])

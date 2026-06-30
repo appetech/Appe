@@ -6,6 +6,8 @@ import frappe
 from .providers import AIProviderError, get_provider
 from .tools import execute_tool, tool_schemas
 from .erpnext_kb import get_kb as _get_erpnext_kb
+from .appe_kb import get_kb as _get_appe_kb
+from .ecosystem_kb import get_kb as _get_ecosystem_kb
 
 
 def _settings():
@@ -118,7 +120,9 @@ def _enriched_system_prompt(base_prompt: str) -> str:
 		"- For 'total payable' / 'how much do we owe' → use `total_payable`.\n"
 		"- For ERPNext queries prefer the high-level helpers: `find_customer`, `customer_summary`, `outstanding_invoices`, `sales_summary`, `top_customers`, `find_item`, `stock_balance`, `low_stock_items`, `item_movement`, `financial_statement`, `account_balance`, `total_receivable`, `total_payable`, `get_fiscal_year`, `find_supplier`, `supplier_summary`, `pending_purchase_orders`, `pending_sales_orders`, `pending_quotations`, `delivery_status`, `my_tasks`, `project_summary`, `find_employee`, `pending_leave_applications`, `my_attendance`, `recent_documents`.\n"
 		"- For generic data: `list_doctypes`, `get_doctype_meta`, then `query_data` / `count_records` / `run_report`.\n"
-		"- For creative actions (creating Sales Orders, Invoices, Items, Customers, new DocTypes, Reports, Charts, Dashboards) state what you'll do, then call the tool. After the tool returns, confirm what was created using the returned name.\n"
+		"- **Appe mobile app config:** use `get_mobile_app_config` to read current modules & dashboard; `list_appe_reports`, `list_appe_screens`, `get_appe_settings_public`, `list_appe_doctypes` to help users understand Appe. To BUILD mobile config: `create_mobile_module`, `create_mobile_dashboard`, `create_appe_report`, `create_appe_screen` (and their update_* variants). After changes tell user to refresh the mobile app.\n"
+		"- **Official documentation & GitHub:** for 'how does X work', 'ERPNext docs', 'GitHub source' questions use `get_doctype_resources`, `get_app_documentation`, `search_official_docs`, `list_frappe_ecosystem_apps`. Always share the official doc URL — you don't have the full docs in memory.\n"
+		"- For creative actions (creating Sales Orders, Invoices, Items, Customers, new DocTypes, Reports, Charts, Dashboards, Mobile App Modules) state what you'll do, then call the tool. After the tool returns, confirm what was created using the returned name.\n"
 		"- Always show monetary values with the company's currency. Format as ₹1,23,456 for INR (Indian numbering).\n"
 		"- Keep answers concise and mobile-friendly. Use short bullet lists, no walls of text.\n"
 		"- If a tool result includes a `note` field, share it briefly with the user — it usually flags edge cases (e.g. wrong filter).\n"
@@ -136,6 +140,12 @@ def _enriched_system_prompt(base_prompt: str) -> str:
 	kb = _get_erpnext_kb(apps["apps"])
 	if kb:
 		parts.append(kb)
+
+	# Inject Appe mobile-app module knowledge (always — this IS the Appe app).
+	parts.append(_get_appe_kb())
+
+	# Frappe ecosystem docs, GitHub links, installed apps reference.
+	parts.append(_get_ecosystem_kb(apps["apps"]))
 
 	return "\n".join(parts)
 

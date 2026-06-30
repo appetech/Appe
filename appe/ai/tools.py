@@ -960,6 +960,18 @@ try:
 except Exception:
 	frappe.log_error(message=frappe.get_traceback(), title="Appe Buddy: erpnext_tools load failed")
 
+# Side-effect import: registers Appe mobile-app config tools.
+try:
+	from . import appe_tools as _appe_tools  # noqa: F401
+except Exception:
+	frappe.log_error(message=frappe.get_traceback(), title="Appe Buddy: appe_tools load failed")
+
+# Side-effect import: Frappe ecosystem docs / GitHub lookup tools.
+try:
+	from . import docs_tools as _docs_tools  # noqa: F401
+except Exception:
+	frappe.log_error(message=frappe.get_traceback(), title="Appe Buddy: docs_tools load failed")
+
 
 # ---------------------------------------------------------------------------
 # Execution wrapper
@@ -1048,6 +1060,28 @@ def tool_schemas() -> list[dict]:
 		if t.name in ("run_report",) and not s.allow_run_report:
 			continue
 		if t.name in ("query_data", "count_records", "create_document", "update_document") and not s.allow_query_data:
+			continue
+		# Appe mobile config — read tools
+		_APPE_READ_TOOLS = {
+			"get_mobile_app_config", "list_appe_reports", "get_appe_report",
+			"list_appe_screens", "get_appe_settings_public", "list_appe_doctypes",
+		}
+		if t.name in _APPE_READ_TOOLS and not s.allow_query_data:
+			continue
+		# Frappe ecosystem docs / GitHub tools
+		_DOCS_TOOLS = {
+			"list_frappe_ecosystem_apps", "get_app_documentation",
+			"get_doctype_resources", "search_official_docs", "get_frappe_api_reference",
+		}
+		if t.name in _DOCS_TOOLS and not s.allow_query_data:
+			continue
+		# Appe mobile config — create/update tools
+		_APPE_CREATE_TOOLS = {
+			"create_mobile_module", "update_mobile_module",
+			"create_mobile_dashboard", "update_mobile_dashboard",
+			"create_appe_report", "create_appe_screen",
+		}
+		if t.name in _APPE_CREATE_TOOLS and not s.allow_create_workspace:
 			continue
 		allowed.append(t.schema())
 	return allowed

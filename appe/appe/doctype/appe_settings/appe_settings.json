@@ -15,6 +15,7 @@
   "enable_approval_requests",
   "enable_attendance",
   "enable_leave_balance",
+  "enable_checkin_details_section",
   "setup_tab",
   "onesignal_app_id",
   "ios_onesignal_app_id",
@@ -40,7 +41,7 @@
    "label": "Enable Check-In With Face-Id"
   },
   {
-   "default": "0",
+   "default": "1",
    "fieldname": "enable_live_location_tracking",
    "fieldtype": "Check",
    "label": " Enable Live Location Tracking"
@@ -141,13 +142,19 @@
    "fieldname": "home_screen_header_icon",
    "fieldtype": "Attach",
    "label": "Home Screen Header Icon"
+  },
+  {
+   "default": "1",
+   "fieldname": "enable_checkin_details_section",
+   "fieldtype": "Check",
+   "label": "Enable CheckIN Details Section"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2026-06-08 18:43:24.342646",
+ "modified": "2026-06-30 08:30:23.002983",
  "modified_by": "Administrator",
  "module": "appe",
  "name": "Appe Settings",

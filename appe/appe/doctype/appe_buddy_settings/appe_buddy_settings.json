@@ -178,10 +178,11 @@
    "label": "Allow Run Report"
   },
   {
-   "default": "0",
+   "default": "1",
+   "description": "Allow AI to create/update Mobile App Module, Mobile App Dashboard, Appe Report and Appe Screen for the Flutter mobile app.",
    "fieldname": "allow_create_workspace",
    "fieldtype": "Check",
-   "label": "Allow Create Workspace"
+   "label": "Allow Create Mobile App Config"
   },
   {
    "fieldname": "section_safety",

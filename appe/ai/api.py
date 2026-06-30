@@ -237,6 +237,7 @@ def settings_public() -> dict:
 				"create_number_card": int(s.allow_create_number_card or 0),
 				"query_data": int(s.allow_query_data or 0),
 				"run_report": int(s.allow_run_report or 0),
+				"create_mobile_config": int(s.allow_create_workspace or 0),
 			},
 		}
 	)
@@ -334,6 +335,7 @@ def me() -> dict:
 					"create_number_card": int(s.allow_create_number_card or 0),
 					"query_data": int(s.allow_query_data or 0),
 					"run_report": int(s.allow_run_report or 0),
+					"create_mobile_config": int(s.allow_create_workspace or 0),
 				},
 			},
 			"erpnext": {
@@ -354,20 +356,21 @@ def suggest_prompts(context: Any = None, limit: int = 6) -> dict:
 	limit = max(1, min(int(limit or 6), 12))
 	apps = frappe.get_installed_apps()
 	prompts: list[str] = [
-		"Build me a Sales report grouped by Customer for last 30 days",
-		"Create a Number Card for total Sales Invoice this month",
-		"Show top 5 customers by revenue this fiscal year",
-		"List all overdue Sales Invoices",
-		"Summarize my pending Tasks",
+		"Mobile app ka current config dikhao",
+		"Home screen pe Customer list ka section banao",
+		"Mobile app me Sales module add karo with Sales Invoice link",
+		"Kaunse Appe Reports configured hain?",
+		"Appe module ke baare me batao — kya kya features hain?",
+		"Mobile app me naya Appe Report setup karo",
 	]
 	if "erpnext" in apps:
 		prompts = [
 			"Total receivable amount kya hai?",
+			"Mobile app ka current config dikhao",
 			"Top 5 customers by revenue this fiscal year",
+			"Home screen pe outstanding invoices ka section banao",
+			"Mobile app me Sales module add karo",
 			"Show outstanding Sales Invoices over 30 days old",
-			"Build a chart of monthly sales for the current fiscal year",
-			"Create a Number Card for total Sales Invoice this month",
-			"Show today's stock movements",
 		]
 	if "hrms" in apps:
 		prompts.append("Show pending Leave Applications for my team")
