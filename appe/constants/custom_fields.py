@@ -30,5 +30,11 @@ custom_Fields = {
             "fieldtype": "Check",
             "insert_after": "disabled",
         },
+        {
+            "description": "In this field, you can compute values from other fields, and the result will be reflected as the current field value.\n\nExample:-\n  amount + (amount * tax_rate / 100)\n",
+            "fieldname": "appe_field_formula",
+            "fieldtype": "Long Text",
+            "label": "Appe Field Formula"
+        }
     ]
 }

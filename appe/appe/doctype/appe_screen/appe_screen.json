@@ -100,7 +100,7 @@
  "index_web_pages_for_search": 1,
  "is_tree": 1,
  "links": [],
- "modified": "2026-06-30 08:44:07.659342",
+ "modified": "2026-07-04 12:33:03.057192",
  "modified_by": "Administrator",
  "module": "appe",
  "name": "Appe Screen",
@@ -122,7 +122,9 @@
  ],
  "row_format": "Dynamic",
  "rows_threshold_for_grid_search": 20,
+ "search_fields": "screen_name,route",
  "sort_field": "modified",
  "sort_order": "DESC",
- "states": []
+ "states": [],
+ "title_field": "screen_name"
 }
