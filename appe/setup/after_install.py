@@ -31,11 +31,19 @@ def create_employee_fields():
                 "module": "Appe"
             },
             {
+                "fieldname": "checkin_blocks_other_features",
+                "fieldtype": "Check",
+                "label": "Check-in Blocks Other Features",
+                "default": "0",
+                "insert_after": "checkin_mandatory",
+                "module": "Appe"
+            },
+            {
                 "fieldname": "enable_live_location_tracking",
                 "fieldtype": "Check",
                 "label": "Enable Live Location Tracking",
                 "default": "0",
-                "insert_after": "checkin_mandatory",
+                "insert_after": "checkin_blocks_other_features",
                 "module": "Appe"
             },
             {

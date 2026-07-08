@@ -329,6 +329,72 @@ def login_user(usr, pwd):
         "message": "User Not Exists",
     }
 
+
+
+@frappe.whitelist(allow_guest=True)
+def my_profile_details():
+
+    if not frappe.session.user or frappe.session.user == "Guest":
+        frappe.local.response["message"] = {
+            "status": False,
+            "message": "User Not Found"
+        }
+        return
+    user_email = ""
+    user_exist = frappe.db.count("User", frappe.session.user)
+    if user_exist > 0:
+        userm = frappe.db.get_all('User', filters={'name': frappe.session.user,'enabled':1}, fields=['name','email','username','full_name','user_image','mobile_no','location','gender','language','time_zone','enabled','user_type'])
+    elif frappe.db.count("User",{'name': frappe.session.user,'enabled':1}):
+        userm = frappe.db.get_all('User', filters={'name': frappe.session.user,'enabled':1}, fields=['name','email','username','full_name','user_image','mobile_no','location','gender','language','time_zone','enabled','user_type'])
+
+    if userm:
+        user_email = userm[0].name
+        
+        erpnext_exists = get_apps()
+        employee_data = frappe.db.get_all("Employee" if erpnext_exists else "Appe Employee", filters={'user_id': user_email}, fields=['*'])
+        if employee_data :
+            settings = frappe.get_doc('Appe Settings')
+            userm[0]['checkin_mandatory']= employee_data[0].checkin_mandatory or 0
+            userm[0]['enable_live_location_tracking']= employee_data[0].enable_live_location_tracking or 0
+            userm[0]['checkin_blocks_other_features']= employee_data[0].checkin_blocks_other_features or 0
+            userm[0]['enable_faceid']= 0            
+            frappe.local.response["message"] = {
+                "status": True,
+                "type": "employee",
+                "message": "Employee Details Fetch Successful",
+                "data":{
+                    "user": employee_data[0].user_id,
+                    "email": userm[0].email,
+                    "settings": settings,
+                    "userData": userm[0],
+                    "erpnext_exists": get_apps()
+                }
+            }
+            
+            return 
+        else:
+            settings = frappe.get_doc('Appe Settings')
+            frappe.local.response["message"] = {
+                "status": True,
+                "type":"User",
+                "message": "User Details Fetch Successful",
+                "data":{
+                    "user": userm[0].name,
+                    "email": userm[0].email,
+                    "settings": settings,
+                    "userData": userm[0],
+                }
+
+            }
+            return    
+
+    frappe.local.response["message"] = {
+        "status": False,
+        "message": "User Not Exists",
+    }
+
+
+
 @frappe.whitelist(allow_guest=True)
 def sendOTP():
     frappe.local.response["message"] = {

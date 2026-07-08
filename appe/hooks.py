@@ -12,6 +12,7 @@ app_home = "/desk/appe"
 # required_apps = []
 after_install = "appe.setup.after_install.after_install"
 after_uninstall = "appe.setup.uninstall.after_uninstall"
+after_migrate = "appe.setup.after_install.after_install"
 # before_uninstall = "appe.setup.uninstall.after_uninstall"
 
 

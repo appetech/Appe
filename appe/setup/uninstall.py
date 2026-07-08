@@ -12,7 +12,8 @@ def remove_employee_fields():
         "checkin_mandatory",
         "enable_live_location_tracking",
         "appe_status",
-        "appe_setting_tab"
+        "appe_setting_tab",
+        "checkin_blocks_other_features"
     ]
 
     for field in custom_fields:
