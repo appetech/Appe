@@ -2,6 +2,8 @@ import frappe
 
 # Flutter named routes → display labels for Appe Screen records.
 DEFAULT_APPE_SCREENS = [
+	{"route": "DoctypeListScreen", "screen_name": "Doctype List Screen"},
+	{"route": "ScanScreen", "screen_name": "Scan Screen"},
 	{"route": "TraceScreen", "screen_name": "Trace"},
 	{"route": "TrainingScreen", "screen_name": "Training"},
 	{"route": "ReportScreen", "screen_name": "Report"},

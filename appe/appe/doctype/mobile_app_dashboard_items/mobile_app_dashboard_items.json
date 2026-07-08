@@ -85,7 +85,8 @@
   {
    "depends_on": "eval:doc.type=='Screen'",
    "fieldname": "screen_name",
-   "fieldtype": "Data",
+   "fieldtype": "Link",
+   "options": "Appe Screen",
    "label": "Screen Name",
    "mandatory_depends_on": "eval:doc.type=='Screen'"
   },
