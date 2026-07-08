@@ -6,11 +6,6 @@
  "engine": "InnoDB",
  "field_order": [
   "section_break_oyoq",
-  "lft",
-  "rgt",
-  "is_group",
-  "old_parent",
-  "parent_appe_screen",
   "screen_name",
   "page",
   "image",
@@ -21,43 +16,6 @@
   {
    "fieldname": "section_break_oyoq",
    "fieldtype": "Section Break"
-  },
-  {
-   "fieldname": "lft",
-   "fieldtype": "Int",
-   "hidden": 1,
-   "label": "Left",
-   "no_copy": 1,
-   "read_only": 1
-  },
-  {
-   "fieldname": "rgt",
-   "fieldtype": "Int",
-   "hidden": 1,
-   "label": "Right",
-   "no_copy": 1,
-   "read_only": 1
-  },
-  {
-   "default": "0",
-   "fieldname": "is_group",
-   "fieldtype": "Check",
-   "label": "Is Group"
-  },
-  {
-   "fieldname": "old_parent",
-   "fieldtype": "Link",
-   "label": "Old Parent",
-   "options": "Appe Screen"
-  },
-  {
-   "fieldname": "parent_appe_screen",
-   "fieldtype": "Link",
-   "ignore_user_permissions": 1,
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Parent Appe Screen",
-   "options": "Appe Screen"
   },
   {
    "fieldname": "screen_name",
@@ -98,9 +56,8 @@
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
- "is_tree": 1,
  "links": [],
- "modified": "2026-07-04 12:33:03.057192",
+ "modified": "2026-07-07 22:17:33.729962",
  "modified_by": "Administrator",
  "module": "appe",
  "name": "Appe Screen",
@@ -123,8 +80,10 @@
  "row_format": "Dynamic",
  "rows_threshold_for_grid_search": 20,
  "search_fields": "screen_name,route",
+ "show_title_field_in_link": 1,
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": [],
- "title_field": "screen_name"
+ "title_field": "screen_name",
+ "translated_doctype": 1
 }
