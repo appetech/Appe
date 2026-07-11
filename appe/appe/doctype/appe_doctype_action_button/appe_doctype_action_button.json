@@ -15,7 +15,13 @@
   "enabled",
   "background_color",
   "color",
-  "image_icon"
+  "image_icon",
+  "type",
+  "linked_doctype",
+  "refrence_docname",
+  "report_name",
+  "screen_name",
+  "web_url"
  ],
  "fields": [
   {
@@ -88,15 +94,51 @@
    "fieldname": "image_icon",
    "fieldtype": "Attach Image",
    "label": "image icon"
+  },
+  {
+   "fieldname": "type",
+   "fieldtype": "Select",
+   "label": "Type",
+   "options": "\nDoctype\nSingle Doctype\nReport\nForm\nDashboard\nScreen\nWebPage\nAPI"
+  },
+  {
+   "fieldname": "linked_doctype",
+   "fieldtype": "Link",
+   "label": "Linked Doctype",
+   "link_filters": "[[\"DocType\",\"istable\",\"=\",0]]",
+   "options": "DocType"
+  },
+  {
+   "fieldname": "refrence_docname",
+   "fieldtype": "Dynamic Link",
+   "label": "Refrence Docname",
+   "options": "linked_doctype"
+  },
+  {
+   "fieldname": "report_name",
+   "fieldtype": "Link",
+   "label": "Report Name",
+   "options": "Appe Report"
+  },
+  {
+   "fieldname": "screen_name",
+   "fieldtype": "Link",
+   "label": "Screen Name",
+   "options": "Appe Screen"
+  },
+  {
+   "fieldname": "web_url",
+   "fieldtype": "Small Text",
+   "label": "Web URL"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-05-31 23:56:45.642408",
+ "modified": "2026-07-11 15:15:06.321604",
  "modified_by": "Administrator",
- "module": "Appe",
+ "module": "appe",
  "name": "Appe Doctype Action Button",
  "owner": "Administrator",
  "permissions": [

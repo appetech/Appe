@@ -12,12 +12,19 @@ import gzip
 import re
 from typing import Optional
 from frappe.utils import get_datetime, now_datetime
+from frappe.utils import get_frappe_version
+
 
 
 _ALLOWED_TYPES = {"Text", "Image", "Video", "Doc", "Pdf", "Location", "Attach"}
 
 
 
+@frappe.whitelist()
+def check_frappe_version():
+    return {
+        "frappe_version": get_frappe_version()
+    }
 
 @frappe.whitelist()
 def get_apps():
