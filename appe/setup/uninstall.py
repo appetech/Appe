@@ -13,7 +13,8 @@ def remove_employee_fields():
         "enable_live_location_tracking",
         "appe_status",
         "appe_setting_tab",
-        "checkin_blocks_other_features"
+        "checkin_blocks_other_features",
+        "checkin_with_faceid"
     ]
 
     for field in custom_fields:

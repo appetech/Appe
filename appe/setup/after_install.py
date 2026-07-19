@@ -25,7 +25,7 @@ def create_employee_fields():
             {
                 "fieldname": "checkin_mandatory",
                 "fieldtype": "Check",
-                "label": "Check-in Mandatory",
+                "label": "Enable Check-in",
                 "default": "0",
                 "insert_after": "appe_setting_tab",
                 "module": "Appe"
@@ -34,6 +34,14 @@ def create_employee_fields():
                 "fieldname": "checkin_blocks_other_features",
                 "fieldtype": "Check",
                 "label": "Check-in Blocks Other Features",
+                "default": "0",
+                "insert_after": "checkin_mandatory",
+                "module": "Appe"
+            },
+            {
+                "fieldname": "checkin_with_faceid",
+                "fieldtype": "Check",
+                "label": "Check-in with Face ID",
                 "default": "0",
                 "insert_after": "checkin_mandatory",
                 "module": "Appe"

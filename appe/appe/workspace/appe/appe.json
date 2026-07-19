@@ -141,26 +141,7 @@
    "onboard": 0,
    "type": "Link"
   },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Appe Customer",
-   "link_count": 0,
-   "link_to": "Appe Customer",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Appe Employee",
-   "link_count": 0,
-   "link_to": "Appe Employee",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
+  
   {
    "hidden": 0,
    "is_query_report": 0,

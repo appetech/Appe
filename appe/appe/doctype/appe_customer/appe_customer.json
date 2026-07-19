@@ -80,9 +80,9 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-08-10 09:59:42.717406",
+ "modified": "2026-07-15 06:33:22.053585",
  "modified_by": "Administrator",
- "module": "Appe",
+ "module": "appe",
  "name": "Appe Customer",
  "owner": "Administrator",
  "permissions": [

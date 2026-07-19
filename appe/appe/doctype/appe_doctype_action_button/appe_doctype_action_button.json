@@ -17,11 +17,20 @@
   "color",
   "image_icon",
   "type",
+  "print_format",
   "linked_doctype",
   "refrence_docname",
   "report_name",
   "screen_name",
-  "web_url"
+  "web_url",
+  "json",
+  "is_default",
+  "show_on_list_view",
+  "show_on_calender_view",
+  "show_on_map_view",
+  "show_on_report_view",
+  "show_on_tree_view",
+  "enable_workflow_action"
  ],
  "fields": [
   {
@@ -58,6 +67,7 @@
   },
   {
    "depends_on": "eval:doc.internal_action_button",
+   "description": "Enter only the method name (e.g., your_method) or the full API path (e.g., custom_app.api.your_method). Do not include the /api/method/ prefix.",
    "fieldname": "internal_action_url",
    "fieldtype": "Small Text",
    "label": "Internal Action URL",
@@ -99,7 +109,7 @@
    "fieldname": "type",
    "fieldtype": "Select",
    "label": "Type",
-   "options": "\nDoctype\nSingle Doctype\nReport\nForm\nDashboard\nScreen\nWebPage\nAPI"
+   "options": "\nDoctype\nSingle Doctype\nReport\nForm\nDashboard\nScreen\nWebPage\nAPI\nPrint"
   },
   {
    "fieldname": "linked_doctype",
@@ -130,13 +140,67 @@
    "fieldname": "web_url",
    "fieldtype": "Small Text",
    "label": "Web URL"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_default",
+   "fieldtype": "Check",
+   "label": "Is Default"
+  },
+  {
+   "default": "0",
+   "fieldname": "show_on_list_view",
+   "fieldtype": "Check",
+   "label": "Show On List View"
+  },
+  {
+   "default": "0",
+   "fieldname": "show_on_calender_view",
+   "fieldtype": "Check",
+   "label": "Show On Calender View"
+  },
+  {
+   "default": "0",
+   "fieldname": "show_on_map_view",
+   "fieldtype": "Check",
+   "label": "Show On Map View"
+  },
+  {
+   "fieldname": "json",
+   "fieldtype": "JSON",
+   "label": "JSON"
+  },
+  {
+   "default": "0",
+   "fieldname": "show_on_report_view",
+   "fieldtype": "Check",
+   "label": "Show On Report View"
+  },
+  {
+   "default": "0",
+   "fieldname": "show_on_tree_view",
+   "fieldtype": "Check",
+   "label": "Show On Tree View"
+  },
+  {
+   "fieldname": "print_format",
+   "fieldtype": "Link",
+   "label": "Print Format",
+   "link_filters": "[]",
+   "options": "Print Format"
+  },
+  {
+   "default": "0",
+   "fieldname": "enable_workflow_action",
+   "fieldtype": "Check",
+   "label": "Enable WorkfLow Action"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-07-11 15:15:06.321604",
+ "modified": "2026-07-15 06:33:19.384830",
  "modified_by": "Administrator",
  "module": "appe",
  "name": "Appe Doctype Action Button",

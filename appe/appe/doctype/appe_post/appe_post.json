@@ -37,9 +37,9 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-08-11 08:42:45.415263",
+ "modified": "2026-07-15 06:33:22.807973",
  "modified_by": "Administrator",
- "module": "Appe",
+ "module": "appe",
  "name": "Appe Post",
  "owner": "Administrator",
  "permissions": [

@@ -83,36 +83,13 @@
    "icon": "users",
    "indent": 0,
    "keep_closed": 0,
-   "label": "Appe Customer",
-   "link_to": "Appe Customer",
+   "label": "Appe Home Tab",
+   "link_to": "Appe Home Tab",
    "link_type": "DocType",
    "show_arrow": 0,
    "type": "Link"
   },
-  {
-   "child": 0,
-   "collapsible": 1,
-   "icon": "user-check",
-   "indent": 0,
-   "keep_closed": 0,
-   "label": "Appe Employee",
-   "link_to": "Appe Employee",
-   "link_type": "DocType",
-   "show_arrow": 0,
-   "type": "Link"
-  },
-  {
-   "child": 0,
-   "collapsible": 1,
-   "icon": "calendar-check",
-   "indent": 0,
-   "keep_closed": 0,
-   "label": "Appe Attendance",
-   "link_to": "Appe Attendance",
-   "link_type": "DocType",
-   "show_arrow": 0,
-   "type": "Link"
-  },
+ 
   {
    "child": 0,
    "collapsible": 1,

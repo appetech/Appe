@@ -1,0 +1,345 @@
+{
+ "actions": [],
+ "creation": "2026-07-15 06:17:53.985591",
+ "doctype": "DocType",
+ "document_type": "Document",
+ "engine": "InnoDB",
+ "field_order": [
+  "form_tab",
+  "title",
+  "published",
+  "column_break_vdhm",
+  "doc_type",
+  "is_standard",
+  "section_break_1",
+  "introduction_text",
+  "appe_form_fields",
+  "settings_tab",
+  "access_control_section",
+  "anonymous",
+  "login_required",
+  "column_break_2",
+  "apply_document_permissions",
+  "allow_edit",
+  "allow_multiple",
+  "form_settings_section",
+  "allow_incomplete",
+  "allow_comments",
+  "allow_print",
+  "print_format",
+  "max_attachment_size",
+  "show_attachments",
+  "condition_section",
+  "condition_description",
+  "condition_json",
+  "section_break_3",
+  "list_setting_message",
+  "show_list",
+  "list_title",
+  "list_columns",
+  "customization_tab",
+  "button_label",
+  "banner_image",
+  "column_break_3",
+  "section_break_5",
+  "success_title",
+  "success_url",
+  "column_break_4",
+  "success_message",
+  "section_break_6",
+  "client_script",
+  "custom_css"
+ ],
+ "fields": [
+  {
+   "fieldname": "form_tab",
+   "fieldtype": "Tab Break",
+   "label": "Form"
+  },
+  {
+   "fieldname": "title",
+   "fieldtype": "Data",
+   "label": "Title",
+   "no_copy": 1,
+   "reqd": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "published",
+   "fieldtype": "Check",
+   "hidden": 1,
+   "label": "Published"
+  },
+  {
+   "fieldname": "column_break_vdhm",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "doc_type",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Select DocType",
+   "options": "DocType",
+   "reqd": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "is_standard",
+   "fieldtype": "Check",
+   "label": "Is standard",
+   "no_copy": 1
+  },
+  {
+   "fieldname": "section_break_1",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "introduction_text",
+   "fieldtype": "Text Editor",
+   "ignore_xss_filter": 1,
+   "label": "Introduction"
+  },
+  {
+   "fieldname": "appe_form_fields",
+   "fieldtype": "Table",
+   "label": "Appe Form Fields",
+   "options": "Appe Form Field"
+  },
+  {
+   "fieldname": "settings_tab",
+   "fieldtype": "Tab Break",
+   "label": "Settings"
+  },
+  {
+   "fieldname": "access_control_section",
+   "fieldtype": "Section Break",
+   "label": "Access Control"
+  },
+  {
+   "default": "0",
+   "description": "If enabled, all responses on the web form will be submitted anonymously",
+   "fieldname": "anonymous",
+   "fieldtype": "Check",
+   "label": "Anonymous responses"
+  },
+  {
+   "default": "0",
+   "depends_on": "eval:!doc.anonymous",
+   "fieldname": "login_required",
+   "fieldtype": "Check",
+   "label": "Login required"
+  },
+  {
+   "fieldname": "column_break_2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "apply_document_permissions",
+   "fieldtype": "Check",
+   "label": "Apply document permissions"
+  },
+  {
+   "default": "0",
+   "depends_on": "login_required",
+   "fieldname": "allow_edit",
+   "fieldtype": "Check",
+   "label": "Allow editing after submit"
+  },
+  {
+   "default": "0",
+   "depends_on": "login_required",
+   "fieldname": "allow_multiple",
+   "fieldtype": "Check",
+   "label": "Allow multiple responses"
+  },
+  {
+   "fieldname": "form_settings_section",
+   "fieldtype": "Section Break",
+   "label": "Form Settings"
+  },
+  {
+   "default": "0",
+   "description": "Allow saving if mandatory fields are not filled",
+   "fieldname": "allow_incomplete",
+   "fieldtype": "Check",
+   "label": "Allow incomplete forms"
+  },
+  {
+   "default": "0",
+   "depends_on": "login_required",
+   "fieldname": "allow_comments",
+   "fieldtype": "Check",
+   "label": "Allow comments"
+  },
+  {
+   "default": "0",
+   "depends_on": "login_required",
+   "fieldname": "allow_print",
+   "fieldtype": "Check",
+   "label": "Allow print"
+  },
+  {
+   "depends_on": "allow_print",
+   "fieldname": "print_format",
+   "fieldtype": "Link",
+   "label": "Print Format",
+   "options": "Print Format"
+  },
+  {
+   "description": "Set size in MB",
+   "fieldname": "max_attachment_size",
+   "fieldtype": "Int",
+   "label": "Max attachment size"
+  },
+  {
+   "default": "0",
+   "depends_on": "login_required",
+   "fieldname": "show_attachments",
+   "fieldtype": "Check",
+   "label": "Show attachments"
+  },
+  {
+   "fieldname": "condition_section",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "condition_description",
+   "fieldtype": "HTML",
+   "label": "Condition description",
+   "options": "<p>Multiple webforms can be created for a single doctype. Add filters specific to this webform to display correct record after submission.</p><p>For Example:</p>\n<p>If you create a separate webform every year to capture feedback from employees add a \n field named year in doctype and add a filter <b>year = 2023</b></p>\n"
+  },
+  {
+   "fieldname": "condition_json",
+   "fieldtype": "JSON",
+   "label": "Condition JSON"
+  },
+  {
+   "collapsible": 1,
+   "collapsible_depends_on": "show_list",
+   "depends_on": "eval:!doc.anonymous",
+   "fieldname": "section_break_3",
+   "fieldtype": "Section Break",
+   "label": "List Settings"
+  },
+  {
+   "fieldname": "list_setting_message",
+   "fieldtype": "HTML",
+   "label": "List setting message"
+  },
+  {
+   "default": "0",
+   "depends_on": "login_required",
+   "fieldname": "show_list",
+   "fieldtype": "Check",
+   "label": "Show list"
+  },
+  {
+   "depends_on": "eval: doc.login_required && doc.show_list",
+   "fieldname": "list_title",
+   "fieldtype": "Data",
+   "label": "Title"
+  },
+  {
+   "depends_on": "eval: doc.login_required && doc.show_list",
+   "fieldname": "list_columns",
+   "fieldtype": "Table",
+   "label": "List Columns",
+   "options": "Appe Form List Column"
+  },
+  {
+   "fieldname": "customization_tab",
+   "fieldtype": "Tab Break",
+   "label": "Customization"
+  },
+  {
+   "default": "Save",
+   "fieldname": "button_label",
+   "fieldtype": "Data",
+   "label": "Submit button label"
+  },
+  {
+   "fieldname": "banner_image",
+   "fieldtype": "Attach Image",
+   "label": "Banner Image"
+  },
+  {
+   "fieldname": "column_break_3",
+   "fieldtype": "Column Break"
+  },
+  {
+   "collapsible": 1,
+   "collapsible_depends_on": "eval: doc.success_title || doc.success_message || doc.success_url",
+   "fieldname": "section_break_5",
+   "fieldtype": "Section Break",
+   "label": "After Submission"
+  },
+  {
+   "fieldname": "success_title",
+   "fieldtype": "Data",
+   "label": "Success title"
+  },
+  {
+   "description": "Go to this URL after completing the form",
+   "fieldname": "success_url",
+   "fieldtype": "Data",
+   "label": "Success URL"
+  },
+  {
+   "fieldname": "column_break_4",
+   "fieldtype": "Column Break"
+  },
+  {
+   "description": "Message to be displayed on successful completion",
+   "fieldname": "success_message",
+   "fieldtype": "Text",
+   "label": "Success message"
+  },
+  {
+   "collapsible": 1,
+   "collapsible_depends_on": "eval: doc.client_script || doc.custom_css",
+   "fieldname": "section_break_6",
+   "fieldtype": "Section Break",
+   "label": "Scripting / Style"
+  },
+  {
+   "description": "For help see <a href=\"https://frappeframework.com/docs/user/en/guides/portal-development/web-forms\" target=\"_blank\" rel=\"noopener noreferrer\">Client Script API and Examples</a>",
+   "fieldname": "client_script",
+   "fieldtype": "Code",
+   "label": "Client script",
+   "options": "Javascript"
+  },
+  {
+   "fieldname": "custom_css",
+   "fieldtype": "Code",
+   "label": "Custom CSS",
+   "options": "CSS"
+  }
+ ],
+ "icon": "icon-edit",
+ "is_published_field": "published",
+ "links": [],
+ "modified": "2026-07-15 06:33:17.929285",
+ "modified_by": "Administrator",
+ "module": "appe",
+ "name": "Appe Form",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Website Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "title",
+ "track_changes": 1
+}

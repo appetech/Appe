@@ -39,9 +39,9 @@
  "index_web_pages_for_search": 1,
  "links": [],
  "make_attachments_public": 1,
- "modified": "2026-03-08 08:17:32.807672",
+ "modified": "2026-07-15 06:33:23.802027",
  "modified_by": "Administrator",
- "module": "Appe",
+ "module": "appe",
  "name": "Mobile App Module",
  "owner": "Administrator",
  "permissions": [

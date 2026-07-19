@@ -73,9 +73,9 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-12-01 11:45:55.778961",
+ "modified": "2026-07-15 06:34:40.568833",
  "modified_by": "Administrator",
- "module": "Appe",
+ "module": "appe",
  "name": "Appe Attendance",
  "owner": "Administrator",
  "permissions": [

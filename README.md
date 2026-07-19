@@ -48,7 +48,19 @@ bench get-app https://github.com/appetech/Appe.git --branch master
 bench install-app appe
 
 ```
+## Face Recognition Setup
 
+<p>Run following commands:</p>
+
+```bash
+cd $PATH_TO_YOUR_BENCH
+sudo apt update
+
+sudo apt install -y build-essential cmake libopenblas-dev liblapack-dev libx11-dev libgtk-3-dev
+
+bench pip install -e appe
+
+```
 
 ## Help & Support
 If you have any questions, issues, or feature requests, we’re here to help.

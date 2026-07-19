@@ -9,6 +9,11 @@ readme = "README.md"
 dynamic = ["version"]
 dependencies = [
     # "frappe>=14.0.0-dev,<=16.0.0-dev"
+    "face-recognition",
+    "numpy",
+    "pillow",
+    "dlib",
+    "opencv-contrib-python"
 ]
 
 [build-system]
