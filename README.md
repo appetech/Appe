@@ -44,7 +44,7 @@ Whether you are running a business on ERPNext or managing custom Frappe modules,
 
 ```bash
 cd $PATH_TO_YOUR_BENCH
-bench get-app https://github.com/appetech/Appe.git --branch master
+bench get-app https://github.com/appetech/Appe.git --branch develop
 bench install-app appe
 
 ```
