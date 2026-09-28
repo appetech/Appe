@@ -1,4 +1,4 @@
-tasks.pyimport frappe
+import frappe
 import json
 from math import radians, sin, cos, sqrt, atan2
 
