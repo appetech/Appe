@@ -3,11 +3,13 @@ from frappe.custom.doctype.custom_field.custom_field import create_custom_fields
 
 from appe.setup.default_appe_screens import create_default_appe_screens
 from appe.setup.default_mobile_app_module import create_default_mobile_app_module
+from appe.setup.default_appe_uoms import create_default_appe_uoms
 
 
 def after_install():
 	create_default_appe_screens()
 	create_default_mobile_app_module()
+	create_default_appe_uoms()
 
 	if frappe.db.exists("DocType", "Employee"):
 		create_employee_fields()

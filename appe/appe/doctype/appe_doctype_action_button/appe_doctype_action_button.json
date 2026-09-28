@@ -50,6 +50,9 @@
   {
    "fieldname": "reference_doctype",
    "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
    "label": "Reference Doctype",
    "link_filters": "[[\"DocType\",\"issingle\",\"=\",0],[\"DocType\",\"istable\",\"=\",0]]",
    "options": "DocType"
@@ -200,7 +203,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-07-15 06:33:19.384830",
+ "modified": "2026-07-24 21:49:34.090470",
  "modified_by": "Administrator",
  "module": "appe",
  "name": "Appe Doctype Action Button",

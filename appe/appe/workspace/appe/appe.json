@@ -1,7 +1,7 @@
 {
  "app": "appe",
  "charts": [],
- "content": "[{\"id\":\"1Lt-8WmDmC\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Appe</span>\",\"col\":12}},{\"id\":\"_iqTcM5pw1\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Mobile App Dashboard\",\"col\":3}},{\"id\":\"lOp5FZP3rF\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Mobile App Module\",\"col\":3}},{\"id\":\"uDji_OBaMp\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Appe Report\",\"col\":3}},{\"id\":\"BUDDY_HDR\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Appe Buddy</span> <span class=\\\"text-muted small\\\">AI assistant for Frappe &amp; ERPNext</span>\",\"col\":12}},{\"id\":\"BUDDY_OPEN\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Open Appe Buddy\",\"col\":3}},{\"id\":\"BUDDY_CHATS\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Buddy Chats\",\"col\":3}},{\"id\":\"BUDDY_SET\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Appe Buddy Settings\",\"col\":3}},{\"id\":\"BUDDY_TIP\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"text-muted small\\\">Tip: open any record and tap the magic button at the bottom-right to ask Appe Buddy about <b>this</b> record. It can also build Reports, Charts, Dashboards and new DocTypes on the fly.</span>\",\"col\":12}},{\"id\":\"cWTsLR11T7\",\"type\":\"card\",\"data\":{\"card_name\":\"Shortcut\",\"col\":4}},{\"id\":\"iEi4MVH20R\",\"type\":\"card\",\"data\":{\"card_name\":\"Dashboard\",\"col\":4}},{\"id\":\"BUDDY_CARD\",\"type\":\"card\",\"data\":{\"card_name\":\"Appe Buddy\",\"col\":4}}]",
+ "content": "[{\"id\":\"1Lt-8WmDmC\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Appe</span>\",\"col\":12}},{\"id\":\"_iqTcM5pw1\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Mobile App Dashboard\",\"col\":3}},{\"id\":\"lOp5FZP3rF\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Mobile App Module\",\"col\":3}},{\"id\":\"uDji_OBaMp\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Appe Report\",\"col\":3}},{\"id\":\"SHOP_HDR\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Appe Shop</span>\",\"col\":12}},{\"id\":\"SHOP_CAT\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Appe Category\",\"col\":3}},{\"id\":\"SHOP_ITEM\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Appe Item\",\"col\":3}},{\"id\":\"BUDDY_HDR\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Appe Buddy</span> <span class=\\\"text-muted small\\\">AI assistant for Frappe &amp; ERPNext</span>\",\"col\":12}},{\"id\":\"BUDDY_OPEN\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Open Appe Buddy\",\"col\":3}},{\"id\":\"BUDDY_CHATS\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Buddy Chats\",\"col\":3}},{\"id\":\"BUDDY_SET\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Appe Buddy Settings\",\"col\":3}},{\"id\":\"BUDDY_TIP\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"text-muted small\\\">Tip: open any record and tap the magic button at the bottom-right to ask Appe Buddy about <b>this</b> record. It can also build Reports, Charts, Dashboards and new DocTypes on the fly.</span>\",\"col\":12}},{\"id\":\"cWTsLR11T7\",\"type\":\"card\",\"data\":{\"card_name\":\"Shortcut\",\"col\":4}},{\"id\":\"iEi4MVH20R\",\"type\":\"card\",\"data\":{\"card_name\":\"Dashboard\",\"col\":4}},{\"id\":\"SHOP_CARD\",\"type\":\"card\",\"data\":{\"card_name\":\"Appe Shop\",\"col\":4}},{\"id\":\"BUDDY_CARD\",\"type\":\"card\",\"data\":{\"card_name\":\"Appe Buddy\",\"col\":4}}]",
  "creation": "2025-08-11 13:38:31.385313",
  "custom_blocks": [],
  "docstatus": 0,
@@ -161,9 +161,48 @@
    "link_type": "DocType",
    "onboard": 0,
    "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Appe Shop",
+   "link_count": 3,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Appe Category",
+   "link_count": 0,
+   "link_to": "Appe Category",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Appe Item",
+   "link_count": 0,
+   "link_to": "Appe Item",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Appe UOM",
+   "link_count": 0,
+   "link_to": "Appe UOM",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
   }
  ],
- "modified": "2026-06-08 09:51:27.867989",
+ "modified": "2026-09-18 19:30:00.000000",
  "modified_by": "Administrator",
  "module": "appe",
  "name": "Appe",
@@ -196,6 +235,22 @@
    "doc_view": "List",
    "label": "Mobile App Module",
    "link_to": "Mobile App Module",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Orange",
+   "doc_view": "List",
+   "label": "Appe Category",
+   "link_to": "Appe Category",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Orange",
+   "doc_view": "List",
+   "label": "Appe Item",
+   "link_to": "Appe Item",
    "stats_filter": "[]",
    "type": "DocType"
   },

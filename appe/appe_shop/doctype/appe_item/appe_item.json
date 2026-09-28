@@ -1,0 +1,279 @@
+{
+ "actions": [],
+ "allow_bulk_edit": 1,
+ "allow_rename": 1,
+ "autoname": "field:item_code",
+ "creation": "2026-09-17 19:31:16.489752",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "details_section",
+  "item_code",
+  "item_name",
+  "pack_info",
+  "tag",
+  "column_break_details",
+  "status",
+  "category",
+  "brand",
+  "subtitle",
+  "pricing_section",
+  "mrp",
+  "rate",
+  "discount_percentage",
+  "column_break_pricing",
+  "uom_doctype",
+  "uom",
+  "uoms",
+  "stock_section",
+  "in_stock",
+  "stock_qty",
+  "column_break_stock",
+  "show_in_home_screen",
+  "is_featured",
+  "sequence_id",
+  "media_section",
+  "image",
+  "video",
+  "images",
+  "description_section",
+  "description",
+  "description_tabs"
+ ],
+ "fields": [
+  {
+   "fieldname": "details_section",
+   "fieldtype": "Section Break",
+   "label": "Details"
+  },
+  {
+   "fieldname": "item_code",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Item Code",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "bold": 1,
+   "fieldname": "item_name",
+   "fieldtype": "Data",
+   "in_global_search": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Item Name",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_details",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "Active",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Status",
+   "options": "\nActive\nDisabled",
+   "reqd": 1
+  },
+  {
+   "fieldname": "category",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Category",
+   "options": "Appe Category"
+  },
+  {
+   "fieldname": "brand",
+   "fieldtype": "Data",
+   "in_standard_filter": 1,
+   "label": "Brand"
+  },
+  {
+   "fieldname": "subtitle",
+   "fieldtype": "Data",
+   "label": "Subtitle"
+  },
+  {
+   "fieldname": "pricing_section",
+   "fieldtype": "Section Break",
+   "label": "Pricing"
+  },
+  {
+   "fieldname": "mrp",
+   "fieldtype": "Currency",
+   "label": "MRP"
+  },
+  {
+   "fieldname": "rate",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Selling Rate",
+   "reqd": 1
+  },
+  {
+   "fieldname": "discount_percentage",
+   "fieldtype": "Percent",
+   "label": "Discount %",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_pricing",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "Appe UOM",
+   "fieldname": "uom_doctype",
+   "fieldtype": "Select",
+   "label": "UOM Doctype",
+   "options": "Appe UOM\nUOM"
+  },
+  {
+   "fieldname": "uom",
+   "fieldtype": "Dynamic Link",
+   "label": "UOM",
+   "options": "uom_doctype"
+  },
+  {
+   "fieldname": "stock_section",
+   "fieldtype": "Section Break",
+   "label": "Stock & Display"
+  },
+  {
+   "default": "1",
+   "fieldname": "in_stock",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "In Stock"
+  },
+  {
+   "default": "0",
+   "fieldname": "stock_qty",
+   "fieldtype": "Float",
+   "label": "Stock Qty"
+  },
+  {
+   "fieldname": "column_break_stock",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "show_in_home_screen",
+   "fieldtype": "Check",
+   "label": "Show in Home Screen"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_featured",
+   "fieldtype": "Check",
+   "label": "Featured"
+  },
+  {
+   "default": "0",
+   "fieldname": "sequence_id",
+   "fieldtype": "Int",
+   "label": "Sequence"
+  },
+  {
+   "fieldname": "media_section",
+   "fieldtype": "Section Break",
+   "label": "Media"
+  },
+  {
+   "fieldname": "image",
+   "fieldtype": "Attach Image",
+   "label": "Image"
+  },
+  {
+   "fieldname": "video",
+   "fieldtype": "Attach",
+   "label": "Video"
+  },
+  {
+   "fieldname": "images",
+   "fieldtype": "Table",
+   "label": "Gallery",
+   "options": "Appe Item Image"
+  },
+  {
+   "fieldname": "description_section",
+   "fieldtype": "Section Break",
+   "label": "Description"
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Text Editor",
+   "label": "Description"
+  },
+  {
+   "fieldname": "pack_info",
+   "fieldtype": "Data",
+   "label": "pack_info"
+  },
+  {
+   "fieldname": "tag",
+   "fieldtype": "Small Text",
+   "label": "tag"
+  },
+  {
+   "fieldname": "uoms",
+   "fieldtype": "Table",
+   "label": "UOMs",
+   "options": "Appe Item UOM"
+  },
+  {
+   "fieldname": "description_tabs",
+   "fieldtype": "Table",
+   "label": "Description Tabs",
+   "options": "Appe Item Tabs Description"
+  }
+ ],
+ "grid_page_length": 50,
+ "image_field": "image",
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "make_attachments_public": 1,
+ "modified": "2026-09-24 09:46:34.584470",
+ "modified_by": "Administrator",
+ "module": "appe shop",
+ "name": "Appe Item",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "All",
+   "share": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "search_fields": "item_name,brand,category",
+ "show_title_field_in_link": 1,
+ "sort_field": "sequence_id",
+ "sort_order": "ASC",
+ "states": [],
+ "title_field": "item_name",
+ "track_changes": 1,
+ "translated_doctype": 1
+}

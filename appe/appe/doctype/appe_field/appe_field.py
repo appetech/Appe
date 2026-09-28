@@ -5,5 +5,5 @@
 from frappe.model.document import Document
 
 
-class AppeFormField(Document):
+class AppeField(Document):
 	pass
