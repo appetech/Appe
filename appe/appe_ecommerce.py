@@ -1,15 +1,3 @@
-"""Appe ecommerce APIs.
-
-Copy this file into the Frappe `appe` app package so it imports as
-`appe.appe_ecommerce` (same app as `appe.appe_api`).
-
-Restart the bench after copying:
-    bench restart
-
-The mobile app calls:
-    /api/method/appe.appe_ecommerce.<method>
-"""
-
 import json
 import re
 
@@ -57,6 +45,22 @@ INDIA_STATES = (
 )
 
 
+ADDRESS_TYPES = (
+    "Billing",
+    "Shipping",
+    "Office",
+    "Personal",
+    "Plant",
+    "Postal",
+    "Shop",
+    "Subsidiary",
+    "Warehouse",
+    "Current",
+    "Permanent",
+    "Other",
+)
+
+
 def _user():
     user = frappe.session.user
     if not user or user == "Guest":
@@ -71,17 +75,24 @@ def _fields(doctype, wanted):
     return [field for field in wanted if field in allowed]
 
 
-def _rows(doctype, fields, filters=None, order_by="modified desc", limit=500):
+def _rows(doctype, fields, filters=None, order_by="modified desc", limit=500, start=0):
     if not frappe.db.exists("DocType", doctype):
         return []
     safe = _fields(doctype, fields)
     if "name" not in safe:
         safe.insert(0, "name")
+    try:
+        offset = int(start or 0)
+    except Exception:
+        offset = 0
+    if offset < 0:
+        offset = 0
     return frappe.get_all(
         doctype,
         fields=safe,
         filters=filters or {},
         order_by=order_by,
+        limit_start=offset,
         limit_page_length=limit,
         ignore_permissions=True,
     )
@@ -427,6 +438,16 @@ def _map_address(address):
         "is_primary": int(address.get("is_primary_address") or 0),
         "is_shipping": int(address.get("is_shipping_address") or 0),
     }
+
+
+def _clean_address_type(value, fallback="Shipping"):
+    text = (value or "").strip()
+    if not text:
+        return fallback
+    match = next((name for name in ADDRESS_TYPES if name.lower() == text.lower()), "")
+    if not match:
+        frappe.throw(_("Select an address type"))
+    return match
 
 
 def _clean_gstin(gstin, required=False):
@@ -887,7 +908,8 @@ def _items_for_groups(group_names):
 
 
 @frappe.whitelist(allow_guest=True)
-def get_category(name):
+def get_category(name, include_items=1):
+    include = str(include_items).strip().lower() not in ("0", "false", "no")
     if _erpnext_installed():
         _ensure_erpnext_fields()
         doc = _doc("Item Group", name)
@@ -895,7 +917,7 @@ def get_category(name):
             frappe.throw(_("Category is not available"), frappe.PermissionError)
         children = _descendant_item_groups(name)
         group_names = [name] + [child.get("name") for child in children]
-        items = _items_for_groups(group_names)
+        items = _items_for_groups(group_names) if include else []
         return {
             "category": _map_item_group(doc.as_dict()),
             "children": children,
@@ -929,37 +951,128 @@ def get_category(name):
         order_by="sequence_id asc",
     )
     item_groups = [name] + [child.get("name") for child in children if child.get("name")]
-    items = _rows(
-        "Appe Item",
-        [
-            "name",
-            "item_code",
-            "item_name",
-            "subtitle",
-            "brand",
-            "category",
-            "status",
-            "mrp",
-            "rate",
-            "discount_percentage",
-            "uom",
-            "in_stock",
-            "stock_qty",
-            "show_in_home_screen",
-            "is_featured",
-            "sequence_id",
-            "image",
-            "video",
-            "description",
-            "pack_info",
-            "tags",
-            "tag",
-            "delivery_mins",
-        ],
-        filters={"status": "Active", "category": ["in", item_groups]},
+    items = []
+    if include:
+        items = _rows(
+            "Appe Item",
+            [
+                "name",
+                "item_code",
+                "item_name",
+                "subtitle",
+                "brand",
+                "category",
+                "status",
+                "mrp",
+                "rate",
+                "discount_percentage",
+                "uom",
+                "in_stock",
+                "stock_qty",
+                "show_in_home_screen",
+                "is_featured",
+                "sequence_id",
+                "image",
+                "video",
+                "description",
+                "pack_info",
+                "tags",
+                "tag",
+                "delivery_mins",
+            ],
+            filters={"status": "Active", "category": ["in", item_groups]},
+            order_by="sequence_id asc",
+        )
+    return {"category": doc.as_dict(), "children": children, "items": items}
+
+
+def _category_page_bounds(limit, start, default_limit=20, max_limit=40):
+    try:
+        page_limit = int(limit or default_limit)
+    except Exception:
+        page_limit = default_limit
+    if page_limit < 1:
+        page_limit = default_limit
+    if page_limit > max_limit:
+        page_limit = max_limit
+    try:
+        page_start = int(start or 0)
+    except Exception:
+        page_start = 0
+    if page_start < 0:
+        page_start = 0
+    return page_limit, page_start
+
+
+def _category_product_order(sort):
+    key = str(sort or "relevance").strip().lower()
+    if key == "price_low":
+        return "standard_rate asc, item_name asc"
+    if key == "price_high":
+        return "standard_rate desc, item_name asc"
+    if key == "discount":
+        return "discount_percentage desc, item_name asc"
+    return "sequence_id asc, item_name asc"
+
+
+@frappe.whitelist(allow_guest=True)
+def get_category_products(name, limit=20, start=0, sort="relevance"):
+    """One page of products for a category. The next page loads on scroll."""
+    page_limit, page_start = _category_page_bounds(limit, start)
+    order = _category_product_order(sort)
+    if _erpnext_installed():
+        _ensure_erpnext_fields()
+        if not frappe.db.exists("Item Group", name):
+            return {"items": [], "total": 0, "start": page_start, "limit": page_limit}
+        doc = _doc("Item Group", name)
+        if (doc.get("status") or "Active") != "Active":
+            frappe.throw(_("Category is not available"), frappe.PermissionError)
+        children = _descendant_item_groups(name)
+        names = [name] + [child.get("name") for child in children if child.get("name")]
+        filters = {
+            "disabled": 0,
+            "item_group": ["in", names],
+            "status": "Active",
+        }
+        total = frappe.db.count("Item", filters)
+        rows = _rows(
+            "Item",
+            _ERP_ITEM_FIELDS,
+            filters=filters,
+            order_by=order,
+            limit=page_limit,
+            start=page_start,
+        )
+        rates = _selling_rate_map([row.get("item_code") or row.get("name") for row in rows])
+        items = []
+        for row in rows:
+            code = row.get("item_code") or row.get("name")
+            price = rates.get(code) or row.get("standard_rate") or 0
+            items.append(_map_item(row, rate=price))
+        return {"items": items, "total": total, "start": page_start, "limit": page_limit}
+    if not frappe.db.exists("Appe Category", name):
+        return {"items": [], "total": 0, "start": page_start, "limit": page_limit}
+    doc = _doc("Appe Category", name)
+    if (doc.get("status") or "") != "Active":
+        frappe.throw(_("Category is not available"), frappe.PermissionError)
+    children = _rows(
+        "Appe Category",
+        ["name"],
+        filters={"status": "Active", "parent_appe_category": name},
         order_by="sequence_id asc",
     )
-    return {"category": doc.as_dict(), "children": children, "items": items}
+    names = [name] + [child.get("name") for child in children if child.get("name")]
+    filters = {"status": "Active", "category": ["in", names]}
+    total = frappe.db.count("Appe Item", filters) if frappe.db.exists("DocType", "Appe Item") else 0
+    items = _rows(
+        "Appe Item",
+        _APPE_ITEM_FIELDS,
+        filters=filters,
+        order_by=order.replace("standard_rate", "rate"),
+        limit=page_limit,
+        start=page_start,
+    )
+    return {"items": items, "total": total, "start": page_start, "limit": page_limit}
 
 
 @frappe.whitelist(allow_guest=True)
@@ -1883,7 +1996,7 @@ def get_addresses():
 
 
 @frappe.whitelist()
-def save_address(address_line1="", city="", state="", pincode="", address_line2="", phone="", gstin="", title=""):
+def save_address(address_line1="", city="", state="", pincode="", address_line2="", phone="", gstin="", title="", address_type="Shipping"):
     user = _user()
     if not _erpnext_installed():
         frappe.throw(_("Addresses are stored on the customer in ERPNext"))
@@ -1909,7 +2022,7 @@ def save_address(address_line1="", city="", state="", pincode="", address_line2=
         phone=(phone or "").strip(),
         email=user if "@" in (user or "") else "",
         gstin=clean_gstin,
-        address_type="Shipping",
+        address_type=_clean_address_type(address_type),
         title=(title or "").strip(),
     )
     frappe.db.commit()
@@ -1935,7 +2048,7 @@ def signup(email="", first_name="", last_name="", company="", phone="", gstin=""
     if frappe.db.exists("User", email):
         frappe.throw(_("An account with this email already exists. Please login."))
     clean_state = _clean_state(state) if (state or "").strip() else ""
-    clean_gstin = _clean_gstin(gstin, required=True)
+    clean_gstin = _clean_gstin(gstin)
 
     user = frappe.get_doc(
         {
