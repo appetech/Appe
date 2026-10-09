@@ -322,8 +322,30 @@ def _map_item(row, rate=None, detail=None):
             for uom in (detail.get("uoms") or [])
             if uom.get("uom")
         ]
-        payload["images"] = []
+        # payload["images"] = []
+        files = _item_files(row.get("name"))
+        images = [row.get("image")] if row.get("image") else []
+        for f in files:
+            url = (f.get("file_url") or "").strip()
+            if url and url not in images and url.lower().split("?")[0].endswith((".png", ".jpg", ".jpeg", ".gif", ".webp", ".bmp", ".svg")):
+                images.append(url)
+        payload["images"] = images
+        payload["files"] = files
     return payload
+
+
+def _item_files(name):
+    if not name:
+        return []
+    return frappe.get_all(
+        "File",
+        filters={"attached_to_doctype": "Item", "attached_to_name": name, "is_private": 0},
+        fields=["file_url", "file_name"],
+        order_by="creation asc",
+        limit_page_length=0,
+        ignore_permissions=True,
+    )
+
 
 
 def _company():
