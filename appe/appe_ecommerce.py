@@ -68,6 +68,17 @@ def _user():
     return user
 
 
+def _as_administrator(fn):
+    """Run [fn] as Administrator, then restore the original session user."""
+    original = frappe.session.user
+    try:
+        frappe.set_user("Administrator")
+        return fn()
+    finally:
+        if original and original != frappe.session.user:
+            frappe.set_user(original)
+
+
 def _fields(doctype, wanted):
     meta = frappe.get_meta(doctype)
     allowed = {df.fieldname for df in meta.fields}
@@ -1269,7 +1280,7 @@ def search(query=""):
         rows = _like_rows(
             "Item",
             _ERP_ITEM_FIELDS,
-            ["item_name", "item_code", "name"],
+            ["item_name", "item_code", "name",  "description"],
             text,
             limit=30,
             filters={"disabled": 0},
@@ -1311,7 +1322,7 @@ def search(query=""):
         items = _like_rows(
             "Appe Item",
             _APPE_ITEM_FIELDS,
-            ["item_name", "item_code", "name"],
+            ["item_name", "item_code", "name", "description"],
             text,
             limit=30,
             filters={"status": "Active"},
@@ -1750,25 +1761,61 @@ def place_order(delivery_address="", notes="", items=None, customer_name=""):
         note_text = (notes or "").strip()
         if delivery_address:
             note_text = delivery_address if not note_text else f"{delivery_address}\n{note_text}"
-        doc = frappe.get_doc(
-            {
-                "doctype": "Quotation",
-                "quotation_to": "Customer",
-                "party_name": customer.name,
-                "customer_name": customer.customer_name,
-                "company": company,
-                "transaction_date": frappe.utils.today(),
-                "valid_till": frappe.utils.add_days(frappe.utils.today(), 30),
-                "order_type": "Sales",
-                "currency": currency,
-                "selling_price_list": price_list,
-                "items": quote_items,
-                "terms": note_text,
-            }
-        )
-        doc.flags.ignore_permissions = True
-        doc.set_missing_values()
-        doc.insert(ignore_permissions=True)
+        # doc = frappe.get_doc(
+        #     {
+        #         "doctype": "Quotation",
+        #         "quotation_to": "Customer",
+        #         "party_name": customer.name,
+        #         "customer_name": customer.customer_name,
+        #         "company": company,
+        #         "transaction_date": frappe.utils.today(),
+        #         "valid_till": frappe.utils.add_days(frappe.utils.today(), 30),
+        #         "order_type": "Sales",
+        #         "currency": currency,
+        #         "selling_price_list": price_list,
+        #         "items": quote_items,
+        #         "terms": note_text,
+        #     }
+        # )
+        # doc.flags.ignore_permissions = True
+        # doc.set_missing_values()
+        # doc.insert(ignore_permissions=True)
+        customer_name = customer.name
+        customer_title = customer.customer_name
+
+        def _create_quotation():
+            doc = frappe.get_doc(
+                {
+                    "doctype": "Quotation",
+                    "quotation_to": "Customer",
+                    "party_name": customer_name,
+                    "customer_name": customer_title,
+                    "company": company,
+                    "transaction_date": frappe.utils.today(),
+                    "valid_till": frappe.utils.add_days(frappe.utils.today(), 30),
+                    "order_type": "Sales",
+                    "currency": currency,
+                    "selling_price_list": price_list,
+                    "items": quote_items,
+                    "terms": note_text,
+                }
+            )
+            doc.flags.ignore_permissions = True
+            doc.set_missing_values()
+            doc.insert(ignore_permissions=True)
+            # Keep the logged-in customer as owner even though save ran as Admin.
+            if user and user != "Administrator":
+                frappe.db.set_value(
+                    "Quotation",
+                    doc.name,
+                    "owner",
+                    user,
+                    update_modified=False,
+                )
+                doc.owner = user
+            return doc
+
+        doc = _as_administrator(_create_quotation)
         frappe.db.commit()
         return _map_sales_order(doc, with_items=True)
 
@@ -2201,3 +2248,23 @@ def download_order_pdf(name):
     frappe.local.response.filename = f"{name}.pdf"
     frappe.local.response.filecontent = get_pdf(html)
     frappe.local.response.type = "pdf"
+
+
+
+@frappe.whitelist()
+def insert_quotation(doc=None):
+    """Create a Quotation without blocking on mandatory fields."""
+    _user()
+    if isinstance(doc, str):
+        doc = json.loads(doc or "{}")
+    if not isinstance(doc, dict):
+        frappe.throw(_("Invalid quotation"))
+    if not frappe.has_permission("Quotation", "create"):
+        frappe.throw(_("Not permitted to create Quotation"), frappe.PermissionError)
+    payload = dict(doc)
+    payload["doctype"] = "Quotation"
+    quotation = frappe.get_doc(payload)
+    quotation.flags.ignore_mandatory = True
+    quotation.insert()
+    frappe.db.commit()
+    return quotation.as_dict()
