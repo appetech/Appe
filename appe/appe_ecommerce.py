@@ -1724,126 +1724,136 @@ def get_order(name):
 
 @frappe.whitelist()
 def place_order(delivery_address="", notes="", items=None, customer_name=""):
+    """Simple checkout: cart items → Quotation (ERPNext) or Appe Order."""
     user = _user()
     if isinstance(items, str):
-        items = json.loads(items or "[]")
-    items = items or []
+        try:
+            items = json.loads(items or "[]")
+        except Exception:
+            items = []
+    if not isinstance(items, list):
+        items = []
     if not items:
         frappe.throw(_("Cart is empty"))
 
+    # ---- ERPNext: create Quotation ----
     if _erpnext_installed():
         _ensure_erpnext_fields()
         customer = _customer_for(user)
-        if customer_name and customer_name != customer.customer_name:
-            customer.customer_name = customer_name
+        if customer_name and str(customer_name).strip() and str(customer_name).strip() != (customer.customer_name or ""):
+            customer.customer_name = str(customer_name).strip()
             customer.flags.ignore_permissions = True
             customer.save(ignore_permissions=True)
+
         company = _company()
         currency = frappe.db.get_value("Company", company, "default_currency") or "INR"
-        price_list = frappe.db.get_single_value("Selling Settings", "selling_price_list")
-        if not price_list:
-            price_list = frappe.db.get_value("Price List", {"selling": 1, "enabled": 1}, "name")
+        price_list = (
+            frappe.db.get_single_value("Selling Settings", "selling_price_list")
+            or frappe.db.get_value("Price List", {"selling": 1, "enabled": 1}, "name")
+        )
+
         quote_items = []
         for raw in items:
+            if not isinstance(raw, dict):
+                continue
             qty = float(raw.get("qty") or 0)
             if qty <= 0:
                 continue
-            item_code = raw.get("item") or raw.get("item_code")
+            item_code = str(
+                raw.get("item_code") or raw.get("item") or raw.get("name") or ""
+            ).strip()
             if not item_code:
                 continue
-            row = {"item_code": item_code, "qty": qty, "rate": float(raw.get("rate") or 0)}
+            row = {
+                "item_code": item_code,
+                "qty": qty,
+                "rate": float(raw.get("rate") or 0),
+            }
             uom = frappe.db.get_value("Item", item_code, "stock_uom")
             if uom:
                 row["uom"] = uom
+            item_name = str(raw.get("item_name") or raw.get("description") or "").strip()
+            if item_name:
+                row["item_name"] = item_name[:140]
             quote_items.append(row)
+
         if not quote_items:
             frappe.throw(_("Cart is empty"))
-        note_text = (notes or "").strip()
-        if delivery_address:
-            note_text = delivery_address if not note_text else f"{delivery_address}\n{note_text}"
-        # doc = frappe.get_doc(
-        #     {
-        #         "doctype": "Quotation",
-        #         "quotation_to": "Customer",
-        #         "party_name": customer.name,
-        #         "customer_name": customer.customer_name,
-        #         "company": company,
-        #         "transaction_date": frappe.utils.today(),
-        #         "valid_till": frappe.utils.add_days(frappe.utils.today(), 30),
-        #         "order_type": "Sales",
-        #         "currency": currency,
-        #         "selling_price_list": price_list,
-        #         "items": quote_items,
-        #         "terms": note_text,
-        #     }
-        # )
-        # doc.flags.ignore_permissions = True
-        # doc.set_missing_values()
-        # doc.insert(ignore_permissions=True)
-        customer_name = customer.name
-        customer_title = customer.customer_name
 
-        def _create_quotation():
-            doc = frappe.get_doc(
-                {
-                    "doctype": "Quotation",
-                    "quotation_to": "Customer",
-                    "party_name": customer_name,
-                    "customer_name": customer_title,
-                    "company": company,
-                    "transaction_date": frappe.utils.today(),
-                    "valid_till": frappe.utils.add_days(frappe.utils.today(), 30),
-                    "order_type": "Sales",
-                    "currency": currency,
-                    "selling_price_list": price_list,
-                    "items": quote_items,
-                    "terms": note_text,
-                }
-            )
+        terms = (notes or "").strip()
+        if delivery_address:
+            terms = delivery_address if not terms else f"{delivery_address}\n{terms}"
+
+        party = customer.name
+        title = customer.customer_name
+
+        def _create():
+            payload = {
+                "doctype": "Quotation",
+                "quotation_to": "Customer",
+                "party_name": party,
+                "customer_name": title,
+                "company": company,
+                "transaction_date": frappe.utils.today(),
+                "valid_till": frappe.utils.add_days(frappe.utils.today(), 30),
+                "order_type": "Sales",
+                "currency": currency,
+                "items": quote_items,
+                "terms": terms,
+            }
+            if price_list:
+                payload["selling_price_list"] = price_list
+            doc = frappe.get_doc(payload)
             doc.flags.ignore_permissions = True
+            doc.flags.ignore_mandatory = True
             doc.set_missing_values()
-            doc.insert(ignore_permissions=True)
-            # Keep the logged-in customer as owner even though save ran as Admin.
+            doc.insert(ignore_permissions=True, ignore_mandatory=True)
             if user and user != "Administrator":
-                frappe.db.set_value(
-                    "Quotation",
-                    doc.name,
-                    "owner",
-                    user,
-                    update_modified=False,
-                )
+                frappe.db.set_value("Quotation", doc.name, "owner", user, update_modified=False)
                 doc.owner = user
             return doc
 
-        doc = _as_administrator(_create_quotation)
+        doc = _as_administrator(_create)
         frappe.db.commit()
         return _map_sales_order(doc, with_items=True)
 
+    # ---- Fallback: Appe Order (no ERPNext) ----
     total_qty = 0
     grand_total = 0
     rows = []
     for raw in items:
+        if not isinstance(raw, dict):
+            continue
         qty = float(raw.get("qty") or 0)
+        if qty <= 0:
+            continue
         rate = float(raw.get("rate") or 0)
         amount = qty * rate
         total_qty += qty
         grand_total += amount
+        item_code = str(
+            raw.get("item_code") or raw.get("item") or raw.get("name") or ""
+        ).strip()
         rows.append(
             {
-                "item": raw.get("item"),
-                "item_name": raw.get("item_name"),
+                "item": item_code,
+                "item_name": raw.get("item_name") or raw.get("description") or item_code,
                 "uom": raw.get("uom"),
                 "qty": qty,
                 "rate": rate,
                 "amount": amount,
             }
         )
+    if not rows:
+        frappe.throw(_("Cart is empty"))
 
     doc = frappe.get_doc(
         {
             "doctype": "Appe Order",
             "user": user,
-            "customer_name": customer_name or frappe.db.get_value("User", user, "full_name") or user,
+            "customer_name": customer_name
+            or frappe.db.get_value("User", user, "full_name")
+            or user,
             "status": "Placed",
             "delivery_address": delivery_address or "Delivering to Work",
             "notes": notes or "",
