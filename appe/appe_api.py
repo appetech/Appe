@@ -233,7 +233,18 @@ def get_chat_messages(
 
 
 @frappe.whitelist()
-def generate_keys(user):
+def generate_keys(user=None):
+    # Only the logged-in user (or a System Manager) may (re)generate API keys for a user.
+    user = user or frappe.session.user
+    if frappe.session.user == "Guest":
+        frappe.throw(frappe._("Not permitted"), frappe.PermissionError)
+    if user != frappe.session.user and "System Manager" not in frappe.get_roles():
+        frappe.throw(frappe._("Not permitted"), frappe.PermissionError)
+    return _generate_keys(user)
+
+
+def _generate_keys(user):
+    # Internal helper: call only after the caller has authenticated `user` (e.g. password checked).
     user_details = frappe.get_doc("User", user)
     api_secret = frappe.generate_hash(length=15)
     
@@ -291,7 +302,7 @@ def login_user(usr, pwd):
 
 
 
-        api_key, api_secret = generate_keys(user_email)
+        api_key, api_secret = _generate_keys(user_email)
         erpnext_exists = get_apps()
         employee_data = frappe.db.get_all("Employee" if erpnext_exists else "Appe Employee", filters={'user_id': user_email}, fields=['*'])
         if employee_data :
@@ -435,7 +446,7 @@ def verifyOTP(usr, pwd):
 
 
 
-        api_key, api_secret = generate_keys(user_email)
+        api_key, api_secret = _generate_keys(user_email)
         # frappe.local.login_manager.user = user_email
         # frappe.local.login_manager.post_login()
         employee_data = frappe.db.get_all('Employee', filters={'user_id': user_email}, fields=['*'])
