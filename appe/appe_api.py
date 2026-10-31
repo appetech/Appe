@@ -232,21 +232,29 @@ def get_chat_messages(
     return {"status": True, "data": rows}
 
 
-@frappe.whitelist()
+_APPE_SETTINGS_SECRET_FIELDS = ("onesignal_api_key", "google_map_api")
+
+
+def get_safe_appe_settings():
+    """Return Appe Settings for API clients without secret keys."""
+    settings = frappe.get_doc("Appe Settings").as_dict()
+    for field in _APPE_SETTINGS_SECRET_FIELDS:
+        settings.pop(field, None)
+    return settings
+
+
 def generate_keys(user):
     user_details = frappe.get_doc("User", user)
     api_secret = frappe.generate_hash(length=15)
-    
-    if not user_details.api_key:
-        api_key = frappe.generate_hash(length=15)
-        user_details.api_key = api_key
-    
-    user_details.api_secret = api_secret
 
+    if not user_details.api_key:
+        user_details.api_key = frappe.generate_hash(length=15)
+
+    user_details.api_secret = api_secret
     user_details.flags.ignore_permissions = True
-    user_details.save(ignore_permissions = True)
+    user_details.save(ignore_permissions=True)
     frappe.db.commit()
-    
+
     return user_details.api_key, api_secret
 
 
@@ -295,7 +303,7 @@ def login_user(usr, pwd):
         erpnext_exists = get_apps()
         employee_data = frappe.db.get_all("Employee" if erpnext_exists else "Appe Employee", filters={'user_id': user_email}, fields=['*'])
         if employee_data :
-            settings = frappe.get_doc('Appe Settings')
+            settings = get_safe_appe_settings()
             userm[0]['checkin_mandatory']= employee_data[0].checkin_mandatory or 0
             userm[0]['enable_live_location_tracking']= employee_data[0].enable_live_location_tracking or 0
             userm[0]['checkin_blocks_other_features']= employee_data[0].checkin_blocks_other_features or 0
@@ -316,7 +324,7 @@ def login_user(usr, pwd):
             
             return 
         else:
-            settings = frappe.get_doc('Appe Settings')
+            settings = get_safe_appe_settings()
             frappe.local.response["message"] = {
                 "status": True,
                 "type":"User",
@@ -361,7 +369,7 @@ def my_profile_details():
         erpnext_exists = get_apps()
         employee_data = frappe.db.get_all("Employee" if erpnext_exists else "Appe Employee", filters={'user_id': user_email}, fields=['*'])
         if employee_data :
-            settings = frappe.get_doc('Appe Settings')
+            settings = get_safe_appe_settings()
             userm[0]['checkin_mandatory']= employee_data[0].checkin_mandatory or 0
             userm[0]['enable_live_location_tracking']= employee_data[0].enable_live_location_tracking or 0
             userm[0]['checkin_blocks_other_features']= employee_data[0].checkin_blocks_other_features or 0
@@ -381,7 +389,7 @@ def my_profile_details():
             
             return 
         else:
-            settings = frappe.get_doc('Appe Settings')
+            settings = get_safe_appe_settings()
             frappe.local.response["message"] = {
                 "status": True,
                 "type":"User",
@@ -441,17 +449,7 @@ def verifyOTP(usr, pwd):
         # frappe.local.login_manager.post_login()
         employee_data = frappe.db.get_all('Employee', filters={'user_id': user_email}, fields=['*'])
         if employee_data :
-            settings = frappe.get_doc('Appe Settings')
-
-            frappe.log_error("appe_api.py login_user employee_data", {
-                "status": True,
-                "message": "User Already Exists",
-                "data":{
-                "token" :f"token {api_key}:{api_secret}",
-                "user": employee_data[0].user_id,
-                "settings": settings
-                }
-            })
+            settings = get_safe_appe_settings()
 
             frappe.local.response["message"] = {
                 "status": True,
