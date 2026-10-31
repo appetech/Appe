@@ -96,7 +96,6 @@
    "options": "Company:company:default_currency"
   },
   {
-   "appe_field_formula": "age_int+weight_float+curreny_amount",
    "fieldname": "total",
    "fieldtype": "Float",
    "label": "Total",
@@ -200,9 +199,9 @@
  "image_field": "attach_image",
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-03-22 22:36:24.281983",
+ "modified": "2026-07-15 06:33:20.476514",
  "modified_by": "Administrator",
- "module": "Appe",
+ "module": "appe",
  "name": "mlead",
  "owner": "Administrator",
  "permissions": [

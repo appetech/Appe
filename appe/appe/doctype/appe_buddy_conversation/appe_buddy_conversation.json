@@ -1,8 +1,7 @@
 {
  "actions": [],
- "allow_rename": 0,
  "autoname": "format:BUDDY-{YYYY}-{MM}-{#####}",
- "creation": "2026-05-28 19:00:00.000000",
+ "creation": "2026-05-28 19:00:00",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
@@ -27,8 +26,8 @@
   {
    "fieldname": "title",
    "fieldtype": "Data",
-   "in_list_view": 1,
    "in_global_search": 1,
+   "in_list_view": 1,
    "label": "Title",
    "reqd": 1
   },
@@ -62,10 +61,10 @@
    "label": "Pinned"
   },
   {
+   "collapsible": 1,
    "fieldname": "section_break_meta",
    "fieldtype": "Section Break",
-   "label": "Metadata",
-   "collapsible": 1
+   "label": "Metadata"
   },
   {
    "fieldname": "model",
@@ -109,10 +108,10 @@
    "options": "Appe Buddy Message"
   },
   {
+   "collapsible": 1,
    "fieldname": "section_break_context",
    "fieldtype": "Section Break",
-   "label": "Context",
-   "collapsible": 1
+   "label": "Context"
   },
   {
    "description": "Free-form JSON context attached to the conversation (e.g. screen, doctype, doc).",
@@ -125,10 +124,11 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-05-28 19:00:00.000000",
+ "modified": "2026-07-15 06:33:20.060732",
  "modified_by": "Administrator",
- "module": "Appe",
+ "module": "appe",
  "name": "Appe Buddy Conversation",
+ "naming_rule": "Expression (old style)",
  "owner": "Administrator",
  "permissions": [
   {

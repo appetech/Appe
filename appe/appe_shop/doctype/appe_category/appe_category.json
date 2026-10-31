@@ -1,0 +1,245 @@
+{
+ "actions": [],
+ "allow_bulk_edit": 1,
+ "allow_rename": 1,
+ "autoname": "field:category",
+ "creation": "2026-09-17 19:14:15.892952",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "details_section",
+  "category",
+  "title",
+  "search_hint",
+  "column_break_details",
+  "status",
+  "sequence_id",
+  "subtitle",
+  "description",
+  "display_section",
+  "show_in_home_screen",
+  "is_group",
+  "column_break_display",
+  "parent_appe_category",
+  "appearance_section",
+  "icon",
+  "background_image",
+  "column_break_appearance",
+  "color_1",
+  "color_2",
+  "banner_section",
+  "banner",
+  "tree_section",
+  "lft",
+  "rgt",
+  "old_parent"
+ ],
+ "fields": [
+  {
+   "fieldname": "details_section",
+   "fieldtype": "Section Break",
+   "label": "Details"
+  },
+  {
+   "fieldname": "category",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Category",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "title",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Title"
+  },
+  {
+   "fieldname": "column_break_details",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "Active",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Status",
+   "options": "\nActive\nDisabled",
+   "reqd": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "sequence_id",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Sequence"
+  },
+  {
+   "fieldname": "subtitle",
+   "fieldtype": "Data",
+   "label": "Subtitle"
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Small Text",
+   "label": "Description"
+  },
+  {
+   "fieldname": "display_section",
+   "fieldtype": "Section Break",
+   "label": "Display"
+  },
+  {
+   "default": "0",
+   "fieldname": "show_in_home_screen",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Show in Home Screen"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_group",
+   "fieldtype": "Check",
+   "label": "Is Group"
+  },
+  {
+   "fieldname": "column_break_display",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "parent_appe_category",
+   "fieldtype": "Link",
+   "ignore_user_permissions": 1,
+   "in_standard_filter": 1,
+   "label": "Parent Appe Category",
+   "options": "Appe Category"
+  },
+  {
+   "fieldname": "appearance_section",
+   "fieldtype": "Section Break",
+   "label": "Appearance"
+  },
+  {
+   "fieldname": "icon",
+   "fieldtype": "Attach Image",
+   "label": "Icon"
+  },
+  {
+   "fieldname": "background_image",
+   "fieldtype": "Attach Image",
+   "label": "Background Image"
+  },
+  {
+   "fieldname": "column_break_appearance",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "color_1",
+   "fieldtype": "Color",
+   "label": "Color 1"
+  },
+  {
+   "fieldname": "color_2",
+   "fieldtype": "Color",
+   "label": "Color 2"
+  },
+  {
+   "fieldname": "banner_section",
+   "fieldtype": "Section Break",
+   "label": "Banners"
+  },
+  {
+   "fieldname": "banner",
+   "fieldtype": "Attachment Gallery",
+   "label": "Banner"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "tree_section",
+   "fieldtype": "Section Break",
+   "label": "Tree"
+  },
+  {
+   "fieldname": "lft",
+   "fieldtype": "Int",
+   "hidden": 1,
+   "label": "Left",
+   "no_copy": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "rgt",
+   "fieldtype": "Int",
+   "hidden": 1,
+   "label": "Right",
+   "no_copy": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "old_parent",
+   "fieldtype": "Link",
+   "hidden": 1,
+   "label": "Old Parent",
+   "options": "Appe Category"
+  },
+  {
+   "fieldname": "search_hint",
+   "fieldtype": "Small Text",
+   "label": "search_hint"
+  }
+ ],
+ "grid_page_length": 50,
+ "image_field": "icon",
+ "index_web_pages_for_search": 1,
+ "is_tree": 1,
+ "links": [
+  {
+   "group": "Items",
+   "link_doctype": "Appe Item",
+   "link_fieldname": "category"
+  }
+ ],
+ "make_attachments_public": 1,
+ "modified": "2026-09-18 21:05:38.860144",
+ "modified_by": "Administrator",
+ "module": "appe shop",
+ "name": "Appe Category",
+ "naming_rule": "By fieldname",
+ "nsm_parent_field": "parent_appe_category",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "All",
+   "share": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "search_fields": "title,subtitle",
+ "show_title_field_in_link": 1,
+ "sort_field": "sequence_id",
+ "sort_order": "ASC",
+ "states": [],
+ "title_field": "category",
+ "track_changes": 1,
+ "translated_doctype": 1
+}

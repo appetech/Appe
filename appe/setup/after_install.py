@@ -3,11 +3,13 @@ from frappe.custom.doctype.custom_field.custom_field import create_custom_fields
 
 from appe.setup.default_appe_screens import create_default_appe_screens
 from appe.setup.default_mobile_app_module import create_default_mobile_app_module
+from appe.setup.default_appe_uoms import create_default_appe_uoms
 
 
 def after_install():
 	create_default_appe_screens()
 	create_default_mobile_app_module()
+	create_default_appe_uoms()
 
 	if frappe.db.exists("DocType", "Employee"):
 		create_employee_fields()
@@ -25,7 +27,7 @@ def create_employee_fields():
             {
                 "fieldname": "checkin_mandatory",
                 "fieldtype": "Check",
-                "label": "Check-in Mandatory",
+                "label": "Enable Check-in",
                 "default": "0",
                 "insert_after": "appe_setting_tab",
                 "module": "Appe"
@@ -34,6 +36,14 @@ def create_employee_fields():
                 "fieldname": "checkin_blocks_other_features",
                 "fieldtype": "Check",
                 "label": "Check-in Blocks Other Features",
+                "default": "0",
+                "insert_after": "checkin_mandatory",
+                "module": "Appe"
+            },
+            {
+                "fieldname": "checkin_with_faceid",
+                "fieldtype": "Check",
+                "label": "Check-in with Face ID",
                 "default": "0",
                 "insert_after": "checkin_mandatory",
                 "module": "Appe"

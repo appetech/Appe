@@ -78,9 +78,9 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-08-13 09:28:21.860447",
+ "modified": "2026-07-15 06:33:21.400575",
  "modified_by": "Administrator",
- "module": "Appe",
+ "module": "appe",
  "name": "Appe Expense",
  "owner": "Administrator",
  "permissions": [

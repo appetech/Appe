@@ -120,9 +120,9 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-05-03 18:07:04.723614",
+ "modified": "2026-07-15 06:33:22.572694",
  "modified_by": "Administrator",
- "module": "Appe",
+ "module": "appe",
  "name": "Appe Chat",
  "owner": "Administrator",
  "permissions": [

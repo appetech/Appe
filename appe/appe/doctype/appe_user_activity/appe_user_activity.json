@@ -78,9 +78,9 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-06-02 21:49:08.749664",
+ "modified": "2026-07-15 06:33:19.235590",
  "modified_by": "Administrator",
- "module": "Appe",
+ "module": "appe",
  "name": "Appe User Activity",
  "owner": "Administrator",
  "permissions": [

@@ -1,0 +1,71 @@
+{
+ "actions": [],
+ "allow_bulk_edit": 1,
+ "allow_rename": 1,
+ "creation": "2026-07-17 09:07:36.694782",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "employee_doctype",
+  "employee_id",
+  "face_image",
+  "encoding",
+  "face_encoding"
+ ],
+ "fields": [
+  {
+   "fieldname": "employee_doctype",
+   "fieldtype": "Select",
+   "label": "Employee Doctype",
+   "options": "Employee\nAppe Employee"
+  },
+  {
+   "fieldname": "employee_id",
+   "fieldtype": "Dynamic Link",
+   "label": "Employee ID",
+   "options": "employee_doctype"
+  },
+  {
+   "fieldname": "face_image",
+   "fieldtype": "Attach Image",
+   "label": "Face Image"
+  },
+  {
+   "fieldname": "encoding",
+   "fieldtype": "Small Text",
+   "label": "Encoding"
+  },
+  {
+   "fieldname": "face_encoding",
+   "fieldtype": "Long Text",
+   "label": "Face Encoding"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-07-17 09:11:50.957586",
+ "modified_by": "Administrator",
+ "module": "appe",
+ "name": "Employee Face",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}

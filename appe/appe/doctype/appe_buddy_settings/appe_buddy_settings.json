@@ -1,7 +1,6 @@
 {
  "actions": [],
- "allow_rename": 0,
- "creation": "2026-05-28 19:00:00.000000",
+ "creation": "2026-05-28 19:00:00",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
@@ -52,6 +51,7 @@
    "default": "OpenAI",
    "fieldname": "provider",
    "fieldtype": "Select",
+   "in_list_view": 1,
    "label": "Provider",
    "options": "OpenAI\nGemini\nAnthropic\nOpenAI Compatible",
    "reqd": 1
@@ -69,6 +69,7 @@
   {
    "fieldname": "api_key",
    "fieldtype": "Password",
+   "in_list_view": 1,
    "label": "API Key",
    "reqd": 1
   },
@@ -213,9 +214,9 @@
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2026-05-28 20:15:00.000000",
+ "modified": "2026-07-15 06:33:19.726799",
  "modified_by": "Administrator",
- "module": "Appe",
+ "module": "appe",
  "name": "Appe Buddy Settings",
  "owner": "Administrator",
  "permissions": [
