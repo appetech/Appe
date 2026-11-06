@@ -588,15 +588,47 @@ def _app_order_status(doc):
     return "Placed"
 
 
+JS_STATUS_FIELD = "js_order_status"
+JS_ORDER_PLACED = "Order Placed"
+JS_SALES_APPROVED = "Approved By Sales Person"
+JS_CUSTOMER_APPROVED = "Approved By Customer"
+
+
+def _js_order_status(doc):
+    """Approval step of a Quotation. Empty on sites without the custom field."""
+    if not doc.meta.has_field(JS_STATUS_FIELD):
+        return ""
+    # Anything already submitted has been agreed, including older quotations.
+    if int(doc.get("docstatus") or 0) == 1:
+        return JS_CUSTOMER_APPROVED
+    return (doc.get(JS_STATUS_FIELD) or "").strip() or JS_ORDER_PLACED
+
+
 def _map_sales_order(doc, with_items=False):
+    js_status = _js_order_status(doc)
+    docstatus = int(doc.get("docstatus") or 0)
+    # Prices are removed here, not in the apps, so the API never exposes them early.
+    prices_ready = not js_status or js_status in (JS_SALES_APPROVED, JS_CUSTOMER_APPROVED)
+
+    def price(value):
+        return (value or 0) if prices_ready else 0
+
     payload = {
         "name": doc.name,
         "user": frappe.session.user,
         "customer_name": doc.get("customer_name") or "",
         "status": _app_order_status(doc),
+        "js_order_status": js_status,
+        "quotation_status": doc.get("status") or "",
+        "docstatus": docstatus,
+        "prices_ready": prices_ready,
+        "can_edit": js_status == JS_SALES_APPROVED and docstatus == 0,
+        "can_download_pdf": not js_status or docstatus == 1,
         "delivery_address": doc.get("shipping_address") or doc.get("address_display") or "",
         "total_qty": doc.get("total_qty") or 0,
-        "grand_total": doc.get("grand_total") or 0,
+        "net_total": price(doc.get("net_total")),
+        "total_taxes_and_charges": price(doc.get("total_taxes_and_charges")),
+        "grand_total": price(doc.get("grand_total")),
         "notes": doc.get("terms") or "",
         "cancel_reason": doc.get("cancel_reason") or "",
         "creation": doc.get("creation"),
@@ -605,12 +637,14 @@ def _map_sales_order(doc, with_items=False):
     if with_items:
         payload["items"] = [
             {
+                "row_name": row.get("name"),
                 "item": row.get("item_code"),
                 "item_name": row.get("item_name"),
+                "image": row.get("image") or "",
                 "uom": row.get("uom") or row.get("stock_uom") or "",
                 "qty": row.get("qty"),
-                "rate": row.get("rate"),
-                "amount": row.get("amount"),
+                "rate": price(row.get("rate")),
+                "amount": price(row.get("amount")),
             }
             for row in (doc.get("items") or [])
         ]
@@ -1803,6 +1837,8 @@ def place_order(delivery_address="", notes="", items=None, customer_name=""):
             }
             if price_list:
                 payload["selling_price_list"] = price_list
+            if frappe.get_meta("Quotation").has_field(JS_STATUS_FIELD):
+                payload[JS_STATUS_FIELD] = JS_ORDER_PLACED
             doc = frappe.get_doc(payload)
             doc.flags.ignore_permissions = True
             doc.flags.ignore_mandatory = True
@@ -1920,6 +1956,104 @@ def cancel_order(name, reason):
     doc.save(ignore_permissions=True)
     frappe.db.commit()
     return {"success": True, "message": f"Order {name} cancelled successfully", "order": doc.as_dict()}
+
+
+def _editable_quotation(name, modified=None):
+    """The customer's own Quotation, while it waits for the customer's approval."""
+    user = _user()
+    customer = _customer_for(user)
+    doc = _doc("Quotation", name)
+    if doc.get("party_name") != customer.name:
+        frappe.throw(_("Not permitted"), frappe.PermissionError)
+    if int(doc.get("docstatus") or 0) != 0 or _js_order_status(doc) != JS_SALES_APPROVED:
+        frappe.throw(_("This order can be changed only after sales approval and before it is submitted"))
+    # Sales may have changed a price while this screen was open.
+    if modified and frappe.utils.get_datetime(modified) != frappe.utils.get_datetime(doc.modified):
+        frappe.throw(_("This order was updated by our team. Please check the latest prices."))
+    return doc
+
+
+def _save_quotation(doc, submit=False):
+    def _run():
+        doc.flags.ignore_permissions = True
+        doc.flags.ignore_mandatory = True
+        if submit:
+            doc.submit()
+        else:
+            doc.save(ignore_permissions=True)
+
+    _as_administrator(_run)
+    frappe.db.commit()
+
+
+@frappe.whitelist(methods=["POST"])
+def update_order(name, items=None, modified=None):
+    """Customer changes qty or removes rows. New rows and prices are never accepted."""
+    doc = _editable_quotation(name, modified)
+    if isinstance(items, str):
+        items = json.loads(items or "[]")
+    wanted = {}
+    for raw in items or []:
+        row_name = str((raw or {}).get("row_name") or "").strip()
+        if row_name:
+            wanted[row_name] = frappe.utils.flt((raw or {}).get("qty"))
+
+    current = {row.name for row in doc.items}
+    if set(wanted) - current or len(wanted) != len(items or []):
+        frappe.throw(_("New items cannot be added to this order"))
+    if not wanted:
+        frappe.throw(_("Keep at least one item, or cancel this order"))
+    if any(qty <= 0 for qty in wanted.values()):
+        frappe.throw(_("Quantity must be more than 0"))
+
+    for row in list(doc.items):
+        if row.name in wanted:
+            row.qty = wanted[row.name]
+        else:
+            doc.remove(row)
+    for index, row in enumerate(doc.items, start=1):
+        row.idx = index
+
+    _save_quotation(doc)
+    return _map_sales_order(doc, with_items=True)
+
+
+@frappe.whitelist(methods=["POST"])
+def submit_order(name, modified=None):
+    """Customer accepts the saved order: status moves on and the Quotation is submitted."""
+    doc = _editable_quotation(name, modified)
+    unpriced = [row.item_code for row in doc.items if frappe.utils.flt(row.rate) <= 0]
+    if unpriced:
+        frappe.throw(_("Price is missing for {0}. Please contact our sales team.").format(", ".join(unpriced)))
+    doc.set(JS_STATUS_FIELD, JS_CUSTOMER_APPROVED)
+    _save_quotation(doc, submit=True)
+    return _map_sales_order(doc, with_items=True)
+
+
+@frappe.whitelist()
+def setup_js_order_status():
+    """Adds JS Order Status to Quotation. Run once per site that wants this flow."""
+    frappe.only_for("System Manager")
+    if frappe.get_meta("Quotation").has_field(JS_STATUS_FIELD):
+        return {"created": False, "message": "JS Order Status already exists"}
+    frappe.get_doc(
+        {
+            "doctype": "Custom Field",
+            "dt": "Quotation",
+            "fieldname": JS_STATUS_FIELD,
+            "label": "JS Order Status",
+            "fieldtype": "Select",
+            "options": "\n".join((JS_ORDER_PLACED, JS_SALES_APPROVED, JS_CUSTOMER_APPROVED)),
+            "default": JS_ORDER_PLACED,
+            "insert_after": "customer_name",
+            "in_list_view": 1,
+            "in_standard_filter": 1,
+            "no_copy": 1,
+        }
+    ).insert(ignore_permissions=True)
+    frappe.db.commit()
+    frappe.clear_cache(doctype="Quotation")
+    return {"created": True, "message": "JS Order Status added to Quotation"}
 
 
 @frappe.whitelist()
@@ -2250,7 +2384,9 @@ def save_profile(full_name="", phone="", email="", address="", city="", pincode=
 
 @frappe.whitelist()
 def download_order_pdf(name):
-    get_order(name)
+    order = get_order(name)
+    if order.get("can_download_pdf") is False:
+        frappe.throw(_("The PDF is available after you submit this order"), frappe.PermissionError)
     doctype = "Quotation" if _erpnext_installed() else "Appe Order"
     html = frappe.get_print(doctype, name)
     from frappe.utils.pdf import get_pdf
