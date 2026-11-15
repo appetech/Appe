@@ -149,7 +149,7 @@ def _ensure_description_tab_doctype():
         {
             "doctype": "DocType",
             "name": "Appe Item Description Tab",
-            "module": "Custom",
+            "module": "appe shop",
             "custom": 1,
             "istable": 1,
             "editable_grid": 1,
@@ -1636,7 +1636,7 @@ def _ensure_home_popup_doctype():
             {
                 "doctype": "DocType",
                 "name": "Appe Home Popup",
-                "module": "Custom",
+                "module": "appe shop",
                 "custom": 1,
                 "autoname": "hash",
                 "title_field": "title",
@@ -1772,123 +1772,188 @@ def get_home_popup():
     }
 
 
+def _contact_location_field_defs():
+    return [
+        {
+            "fieldname": "location_name",
+            "label": "Location Name",
+            "fieldtype": "Data",
+            "in_list_view": 1,
+            "reqd": 1,
+        },
+        {
+            "fieldname": "is_default",
+            "label": "Default",
+            "fieldtype": "Check",
+            "default": "0",
+            "in_list_view": 1,
+            "description": "Tick one location. Website and app show this location first.",
+        },
+        {
+            "fieldname": "contact_number",
+            "label": "Contact Number",
+            "fieldtype": "Data",
+            "in_list_view": 1,
+        },
+        {
+            "fieldname": "whatsapp_number",
+            "label": "WhatsApp Number",
+            "fieldtype": "Data",
+        },
+        {
+            "fieldname": "email",
+            "label": "Email",
+            "fieldtype": "Data",
+            "options": "Email",
+        },
+        {
+            "fieldname": "working_hours",
+            "label": "Working Hours",
+            "fieldtype": "Small Text",
+        },
+        {
+            "fieldname": "section_address",
+            "label": "Address & Map",
+            "fieldtype": "Section Break",
+        },
+        {
+            "fieldname": "address",
+            "label": "Address",
+            "fieldtype": "Small Text",
+        },
+        {
+            "fieldname": "city",
+            "label": "City",
+            "fieldtype": "Data",
+            "in_list_view": 1,
+        },
+        {
+            "fieldname": "state",
+            "label": "State",
+            "fieldtype": "Data",
+        },
+        {
+            "fieldname": "pincode",
+            "label": "Pincode",
+            "fieldtype": "Data",
+        },
+        {
+            "fieldname": "column_map",
+            "fieldtype": "Column Break",
+        },
+        {
+            "fieldname": "latitude",
+            "label": "Latitude",
+            "fieldtype": "Float",
+            "precision": "7",
+        },
+        {
+            "fieldname": "longitude",
+            "label": "Longitude",
+            "fieldtype": "Float",
+            "precision": "7",
+        },
+        {
+            "fieldname": "map_url",
+            "label": "Map URL",
+            "fieldtype": "Data",
+            "description": "Google Maps / Apple Maps link",
+        },
+    ]
+
+
+def _ensure_contact_location_doctype():
+    """Child table: one row per office / branch."""
+    if frappe.db.exists("DocType", "Appe Contact Location"):
+        return
+    frappe.get_doc(
+        {
+            "doctype": "DocType",
+            "name": "Appe Contact Location",
+            "module": "appe shop",
+            "custom": 0,
+            "istable": 1,
+            "editable_grid": 1,
+            "fields": _contact_location_field_defs(),
+        }
+    ).insert(ignore_permissions=True)
+    frappe.db.commit()
+
+
+def _append_doctype_field(doctype, field):
+    doc = frappe.get_doc("DocType", doctype)
+    if any(df.fieldname == field["fieldname"] for df in doc.fields):
+        return False
+    doc.append("fields", field)
+    doc.save(ignore_permissions=True)
+    frappe.db.commit()
+    frappe.clear_cache(doctype=doctype)
+    return True
+
+
 def _ensure_contact_us_doctype():
-    """Single DocType: Appe Contact Us — phone, WhatsApp, email, map, etc."""
+    """Single DocType with many locations. One location can be the default."""
     if getattr(frappe.local, "appe_contact_us_ready", False):
         return
+    _ensure_contact_location_doctype()
+    shared_fields = [
+        {
+            "fieldname": "company_name",
+            "label": "Company Name",
+            "fieldtype": "Data",
+        },
+        {
+            "fieldname": "website",
+            "label": "Website",
+            "fieldtype": "Data",
+        },
+        {
+            "fieldname": "section_locations",
+            "label": "Locations",
+            "fieldtype": "Section Break",
+            "description": "Add one row per branch. Mark exactly one row as Default.",
+        },
+        {
+            "fieldname": "locations",
+            "label": "Locations",
+            "fieldtype": "Table",
+            "options": "Appe Contact Location",
+        },
+        {
+            "fieldname": "section_other",
+            "label": "Other",
+            "fieldtype": "Section Break",
+        },
+        {
+            "fieldname": "other_info",
+            "label": "Other Info",
+            "fieldtype": "Text Editor",
+        },
+        {
+            "fieldname": "facebook_url",
+            "label": "Facebook URL",
+            "fieldtype": "Data",
+        },
+        {
+            "fieldname": "instagram_url",
+            "label": "Instagram URL",
+            "fieldtype": "Data",
+        },
+        {
+            "fieldname": "youtube_url",
+            "label": "YouTube URL",
+            "fieldtype": "Data",
+        },
+    ]
     if not frappe.db.exists("DocType", "Appe Contact Us"):
         frappe.get_doc(
             {
                 "doctype": "DocType",
                 "name": "Appe Contact Us",
-                "module": "Custom",
+                "module": "appe shop",
                 "custom": 0,
                 "issingle": 1,
-                "fields": [
-                    {
-                        "fieldname": "company_name",
-                        "label": "Company Name",
-                        "fieldtype": "Data",
-                    },
-                    {
-                        "fieldname": "contact_number",
-                        "label": "Contact Number",
-                        "fieldtype": "Data",
-                    },
-                    {
-                        "fieldname": "whatsapp_number",
-                        "label": "WhatsApp Number",
-                        "fieldtype": "Data",
-                    },
-                    {
-                        "fieldname": "email",
-                        "label": "Email",
-                        "fieldtype": "Data",
-                        "options": "Email",
-                    },
-                    {
-                        "fieldname": "website",
-                        "label": "Website",
-                        "fieldtype": "Data",
-                    },
-                    {
-                        "fieldname": "working_hours",
-                        "label": "Working Hours",
-                        "fieldtype": "Small Text",
-                    },
-                    {
-                        "fieldname": "section_address",
-                        "label": "Address & Map",
-                        "fieldtype": "Section Break",
-                    },
-                    {
-                        "fieldname": "address",
-                        "label": "Address",
-                        "fieldtype": "Small Text",
-                    },
-                    {
-                        "fieldname": "city",
-                        "label": "City",
-                        "fieldtype": "Data",
-                    },
-                    {
-                        "fieldname": "state",
-                        "label": "State",
-                        "fieldtype": "Data",
-                    },
-                    {
-                        "fieldname": "pincode",
-                        "label": "Pincode",
-                        "fieldtype": "Data",
-                    },
-                    {
-                        "fieldname": "column_map",
-                        "fieldtype": "Column Break",
-                    },
-                    {
-                        "fieldname": "latitude",
-                        "label": "Latitude",
-                        "fieldtype": "Float",
-                        "precision": "7",
-                    },
-                    {
-                        "fieldname": "longitude",
-                        "label": "Longitude",
-                        "fieldtype": "Float",
-                        "precision": "7",
-                    },
-                    {
-                        "fieldname": "map_url",
-                        "label": "Map URL",
-                        "fieldtype": "Data",
-                        "description": "Google Maps / Apple Maps link",
-                    },
-                    {
-                        "fieldname": "section_other",
-                        "label": "Other",
-                        "fieldtype": "Section Break",
-                    },
-                    {
-                        "fieldname": "other_info",
-                        "label": "Other Info",
-                        "fieldtype": "Text Editor",
-                    },
-                    {
-                        "fieldname": "facebook_url",
-                        "label": "Facebook URL",
-                        "fieldtype": "Data",
-                    },
-                    {
-                        "fieldname": "instagram_url",
-                        "label": "Instagram URL",
-                        "fieldtype": "Data",
-                    },
-                    {
-                        "fieldname": "youtube_url",
-                        "label": "YouTube URL",
-                        "fieldtype": "Data",
-                    },
-                ],
+                "fields": shared_fields,
                 "permissions": [
                     {
                         "role": "System Manager",
@@ -1905,38 +1970,178 @@ def _ensure_contact_us_doctype():
             }
         ).insert(ignore_permissions=True)
         frappe.db.commit()
-    # Ensure the single document row exists.
+    else:
+        _append_doctype_field(
+            "Appe Contact Us",
+            {
+                "fieldname": "section_locations",
+                "label": "Locations",
+                "fieldtype": "Section Break",
+                "description": "Add one row per branch. Mark exactly one row as Default.",
+            },
+        )
+        _append_doctype_field(
+            "Appe Contact Us",
+            {
+                "fieldname": "locations",
+                "label": "Locations",
+                "fieldtype": "Table",
+                "options": "Appe Contact Location",
+            },
+        )
     if not frappe.db.exists("Appe Contact Us", "Appe Contact Us"):
         frappe.get_doc({"doctype": "Appe Contact Us"}).insert(ignore_permissions=True)
         frappe.db.commit()
+    _migrate_contact_locations()
+    _hide_legacy_contact_fields()
     frappe.local.appe_contact_us_ready = True
 
 
-def _map_contact_us(doc):
+def _migrate_contact_locations():
+    """Copy the old single address into the first default location row."""
+    if not frappe.get_meta("Appe Contact Us").has_field("locations"):
+        return
+    doc = frappe.get_single("Appe Contact Us")
+    if doc.get("locations"):
+        return
+    legacy_keys = (
+        "contact_number",
+        "whatsapp_number",
+        "email",
+        "working_hours",
+        "address",
+        "city",
+        "state",
+        "pincode",
+        "latitude",
+        "longitude",
+        "map_url",
+    )
+    if not any(doc.get(key) for key in legacy_keys):
+        return
+    row = {"is_default": 1, "location_name": doc.get("city") or "Main"}
+    for key in legacy_keys:
+        if doc.get(key) not in (None, ""):
+            row[key] = doc.get(key)
+    doc.append("locations", row)
+    doc.flags.ignore_permissions = True
+    doc.save(ignore_permissions=True)
+    frappe.db.commit()
+
+
+def _hide_legacy_contact_fields():
+    """Location details live on the child table. Hide the old single-row fields."""
+    legacy = {
+        "contact_number",
+        "whatsapp_number",
+        "email",
+        "working_hours",
+        "section_address",
+        "address",
+        "city",
+        "state",
+        "pincode",
+        "column_map",
+        "latitude",
+        "longitude",
+        "map_url",
+    }
+    if not frappe.db.exists("DocType", "Appe Contact Us"):
+        return
+    doc = frappe.get_doc("DocType", "Appe Contact Us")
+    if not any(df.fieldname == "locations" for df in doc.fields):
+        return
+    changed = False
+    for df in doc.fields:
+        if df.fieldname in legacy and not df.hidden:
+            df.hidden = 1
+            changed = True
+    if not changed:
+        return
+    doc.save(ignore_permissions=True)
+    frappe.db.commit()
+    frappe.clear_cache(doctype="Appe Contact Us")
+
+
+def _map_contact_location(row):
+    def _num(value):
+        try:
+            return float(value or 0)
+        except (TypeError, ValueError):
+            return 0
+
     return {
+        "location_name": row.get("location_name") or "",
+        "is_default": 1 if int(row.get("is_default") or 0) else 0,
+        "contact_number": row.get("contact_number") or "",
+        "whatsapp_number": row.get("whatsapp_number") or "",
+        "email": row.get("email") or "",
+        "working_hours": row.get("working_hours") or "",
+        "address": row.get("address") or "",
+        "city": row.get("city") or "",
+        "state": row.get("state") or "",
+        "pincode": row.get("pincode") or "",
+        "latitude": _num(row.get("latitude")),
+        "longitude": _num(row.get("longitude")),
+        "map_url": row.get("map_url") or "",
+    }
+
+
+def _legacy_contact_location(doc):
+    """Older single-row fields, used only when no location rows exist yet."""
+    mapped = _map_contact_location(doc)
+    if not any(
+        mapped.get(key)
+        for key in (
+            "contact_number",
+            "whatsapp_number",
+            "email",
+            "address",
+            "city",
+            "map_url",
+        )
+    ):
+        return None
+    mapped["is_default"] = 1
+    if not mapped["location_name"]:
+        mapped["location_name"] = doc.get("city") or "Main"
+    return mapped
+
+
+def _map_contact_us(doc):
+    locations = [_map_contact_location(row) for row in (doc.get("locations") or [])]
+    if not locations:
+        legacy = _legacy_contact_location(doc)
+        if legacy:
+            locations = [legacy]
+    default = next((row for row in locations if row.get("is_default")), None)
+    if default is None and locations:
+        default = locations[0]
+        default["is_default"] = 1
+    ordered = []
+    if default:
+        ordered.append(default)
+    ordered.extend(row for row in locations if row is not default)
+    for row in ordered[1:]:
+        row["is_default"] = 0
+    payload = {
         "company_name": doc.get("company_name") or "",
-        "contact_number": doc.get("contact_number") or "",
-        "whatsapp_number": doc.get("whatsapp_number") or "",
-        "email": doc.get("email") or "",
         "website": doc.get("website") or "",
-        "working_hours": doc.get("working_hours") or "",
-        "address": doc.get("address") or "",
-        "city": doc.get("city") or "",
-        "state": doc.get("state") or "",
-        "pincode": doc.get("pincode") or "",
-        "latitude": doc.get("latitude") or 0,
-        "longitude": doc.get("longitude") or 0,
-        "map_url": doc.get("map_url") or "",
         "other_info": doc.get("other_info") or "",
         "facebook_url": doc.get("facebook_url") or "",
         "instagram_url": doc.get("instagram_url") or "",
         "youtube_url": doc.get("youtube_url") or "",
+        "locations": ordered,
     }
+    flat = default or _map_contact_location({})
+    for key, value in flat.items():
+        payload[key] = value
+    return payload
 
 
 @frappe.whitelist(allow_guest=True)
 def get_contact_us():
-    """Customer Contact Us details from Appe Contact Us (Single)."""
+    """Website and app contact details. Default location is flattened on the root."""
     _ensure_contact_us_doctype()
 
     def _load():
