@@ -594,7 +594,18 @@ JS_STATUS_FIELDS = ("custom_js_order_status", "js_order_status")
 JS_STATUS_FIELD = "js_order_status"
 JS_ORDER_PLACED = "Submited For Quotation"
 JS_SALES_APPROVED = "Approved By Sales Person"
+JS_CORRECTION = "Correction By Customer"
 JS_CUSTOMER_APPROVED = "Approved By Customer"
+JS_CANCELLED_BY_CUSTOMER = "Cancelled By Customer"
+JS_STATUS_OPTIONS = (
+    JS_ORDER_PLACED,
+    JS_SALES_APPROVED,
+    JS_CORRECTION,
+    JS_CUSTOMER_APPROVED,
+    JS_CANCELLED_BY_CUSTOMER,
+)
+# Customer may change qty in these draft statuses, then submit.
+JS_CUSTOMER_EDITABLE = (JS_SALES_APPROVED, JS_CORRECTION)
 # Customer website/app checkout only — staff quotations keep the default series.
 WEB_QTN_NAMING_SERIES = "WEB-QTN-.YYYY.-"
 
@@ -665,13 +676,17 @@ def _js_status_fieldname(doc=None):
 
 def _js_order_status(doc):
     """JS Order Status for UI. Never falls back to Quotation `status`."""
+    field = _js_status_fieldname(doc)
+    value = (doc.get(field) or "").strip() if field else ""
+    # Customer cancel must stay visible even if the doc was submitted in order to cancel.
+    if value == JS_CANCELLED_BY_CUSTOMER:
+        return value
     # Anything already submitted has been agreed, including older quotations.
     if int(doc.get("docstatus") or 0) == 1:
         return JS_CUSTOMER_APPROVED
-    field = _js_status_fieldname(doc)
     if not field:
         return JS_ORDER_PLACED
-    return (doc.get(field) or "").strip() or JS_ORDER_PLACED
+    return value or JS_ORDER_PLACED
 
 
 def _set_js_order_status(doc, value):
@@ -680,9 +695,84 @@ def _set_js_order_status(doc, value):
         doc.set(field, value)
 
 
+def _refresh_doc_meta(doc):
+    if doc is not None and hasattr(doc, "_meta"):
+        delattr(doc, "_meta")
+
+
+def _ensure_js_status_options(doc=None):
+    """Append customer-flow statuses when the Quotation select does not have them yet."""
+    fieldname = _js_status_fieldname(doc)
+
+    def _run():
+        if not fieldname:
+            return
+        meta = frappe.get_meta("Quotation")
+        field = meta.get_field(fieldname)
+        if not field:
+            return
+        lines = (field.options or "").split("\n")
+        known = {line.strip() for line in lines if line.strip()}
+        missing = [opt for opt in JS_STATUS_OPTIONS if opt not in known]
+        if not missing:
+            return
+        updated = list(lines)
+        if updated and not updated[-1].strip():
+            updated.pop()
+        updated.extend(missing)
+        joined = "\n".join(updated)
+        setter = frappe.db.get_value(
+            "Property Setter",
+            {
+                "doc_type": "Quotation",
+                "field_name": fieldname,
+                "property": "options",
+            },
+            "name",
+        )
+        if setter:
+            frappe.db.set_value("Property Setter", setter, "value", joined)
+        else:
+            custom = frappe.db.get_value(
+                "Custom Field",
+                {"dt": "Quotation", "fieldname": fieldname},
+                "name",
+            )
+            if custom:
+                frappe.db.set_value("Custom Field", custom, "options", joined)
+            else:
+                from frappe.custom.doctype.property_setter.property_setter import (
+                    make_property_setter,
+                )
+
+                make_property_setter(
+                    "Quotation",
+                    fieldname,
+                    "options",
+                    joined,
+                    "Text",
+                    validate_fields_for_doctype=False,
+                )
+        frappe.clear_cache(doctype="Quotation")
+
+    try:
+        _as_administrator(_run)
+    except Exception:
+        try:
+            frappe.log_error(frappe.get_traceback(), "JS Order Status options")
+        except Exception:
+            pass
+    _refresh_doc_meta(doc)
+
+
 def _js_prices_ready(js_status):
-    """Prices + PDF only after sales-person or customer approval."""
-    return js_status in (JS_SALES_APPROVED, JS_CUSTOMER_APPROVED)
+    """Prices stay visible while the customer can review or has approved."""
+    return js_status in (JS_SALES_APPROVED, JS_CORRECTION, JS_CUSTOMER_APPROVED)
+
+
+def _js_pdf_ready(js_status):
+    """PDF only after the customer submits and the status is Approved By Customer."""
+    return js_status == JS_CUSTOMER_APPROVED
 
 
 def _map_sales_order(doc, with_items=False):
@@ -704,9 +794,9 @@ def _map_sales_order(doc, with_items=False):
         "quotation_status": doc.get("status") or "",
         "docstatus": docstatus,
         "prices_ready": prices_ready,
-        # Qty change allowed only while custom_js_order_status is Approved By Sales Person.
-        "can_edit": js_status == JS_SALES_APPROVED and docstatus == 0,
-        "can_download_pdf": prices_ready,
+        # Qty change while sales-approved or after the customer saves a correction.
+        "can_edit": js_status in JS_CUSTOMER_EDITABLE and docstatus == 0,
+        "can_download_pdf": _js_pdf_ready(js_status),
         "delivery_address": doc.get("shipping_address") or doc.get("address_display") or "",
         "total_qty": doc.get("total_qty") or 0,
         "net_total": price(doc.get("net_total")),
@@ -2399,6 +2489,8 @@ def cancel_order(name, reason):
             frappe.throw(_("This quotation is already ordered and cannot be cancelled"))
 
         def _cancel():
+            _ensure_js_status_options(doc)
+            _set_js_order_status(doc, JS_CANCELLED_BY_CUSTOMER)
             if doc.meta.has_field("cancel_reason"):
                 doc.cancel_reason = reason
             doc.flags.ignore_permissions = True
@@ -2408,6 +2500,15 @@ def cancel_order(name, reason):
                 doc.save(ignore_permissions=True)
                 doc.submit()
             doc.cancel()
+            field = _js_status_fieldname(doc)
+            if field:
+                frappe.db.set_value(
+                    "Quotation",
+                    doc.name,
+                    field,
+                    JS_CANCELLED_BY_CUSTOMER,
+                    update_modified=False,
+                )
             return doc
 
         _as_administrator(_cancel)
@@ -2451,7 +2552,7 @@ def _editable_quotation(name, modified=None):
     doc = _doc("Quotation", name)
     if doc.get("party_name") != customer.name:
         frappe.throw(_("Not permitted"), frappe.PermissionError)
-    if int(doc.get("docstatus") or 0) != 0 or _js_order_status(doc) != JS_SALES_APPROVED:
+    if int(doc.get("docstatus") or 0) != 0 or _js_order_status(doc) not in JS_CUSTOMER_EDITABLE:
         frappe.throw(_("This order can be changed only after sales approval and before it is submitted"))
     # Sales may have changed a price while this screen was open.
     if modified and frappe.utils.get_datetime(modified) != frappe.utils.get_datetime(doc.modified):
@@ -2503,6 +2604,8 @@ def update_order(name, items=None, modified=None):
     for index, row in enumerate(doc.items, start=1):
         row.idx = index
 
+    _ensure_js_status_options(doc)
+    _set_js_order_status(doc, JS_CORRECTION)
     _save_quotation(doc)
     return _map_sales_order(doc, with_items=True)
 
@@ -2514,6 +2617,7 @@ def submit_order(name, modified=None):
     unpriced = [row.item_code for row in doc.items if frappe.utils.flt(row.rate) <= 0]
     if unpriced:
         frappe.throw(_("Price is missing for {0}. Please contact our sales team.").format(", ".join(unpriced)))
+    _ensure_js_status_options(doc)
     _set_js_order_status(doc, JS_CUSTOMER_APPROVED)
     _save_quotation(doc, submit=True)
     return _map_sales_order(doc, with_items=True)
@@ -2524,7 +2628,8 @@ def setup_js_order_status():
     """Adds JS Order Status to Quotation. Run once per site that wants this flow."""
     frappe.only_for("System Manager")
     if _js_status_fieldname():
-        return {"created": False, "message": "JS Order Status already exists"}
+        _ensure_js_status_options()
+        return {"created": False, "message": "JS Order Status options updated"}
     frappe.get_doc(
         {
             "doctype": "Custom Field",
@@ -2532,7 +2637,7 @@ def setup_js_order_status():
             "fieldname": JS_STATUS_FIELD,
             "label": "JS Order Status",
             "fieldtype": "Select",
-            "options": "\n".join((JS_ORDER_PLACED, JS_SALES_APPROVED, JS_CUSTOMER_APPROVED)),
+            "options": "\n".join(JS_STATUS_OPTIONS),
             "default": JS_ORDER_PLACED,
             "insert_after": "customer_name",
             "in_list_view": 1,
@@ -2876,7 +2981,7 @@ def download_order_pdf(name):
     order = get_order(name)
     if order.get("can_download_pdf") is False:
         frappe.throw(
-            _("PDF is available only after Approved By Sales Person or Approved By Customer"),
+            _("PDF is available only after Approved By Customer"),
             frappe.PermissionError,
         )
     doctype = "Quotation" if _erpnext_installed() else "Appe Order"
