@@ -415,6 +415,7 @@ def _customer_address(customer_name):
 
 
 def _address_record(name):
+    meta = frappe.get_meta("Address")
     fields = [
         "name",
         "address_title",
@@ -430,8 +431,9 @@ def _address_record(name):
         "is_primary_address",
         "is_shipping_address",
     ]
-    if frappe.get_meta("Address").has_field("gstin"):
-        fields.append("gstin")
+    for extra in ("mobile_no", "mobile_number", "mobile", "gstin"):
+        if meta.has_field(extra) and extra not in fields:
+            fields.append(extra)
     return frappe.db.get_value("Address", name, fields, as_dict=True)
 
 
@@ -456,6 +458,15 @@ def _customer_addresses(customer_name):
 
 
 def _map_address(address):
+    phone = (address.get("phone") or "").strip()
+    mobile = ""
+    for extra in ("mobile_no", "mobile_number", "mobile"):
+        value = (address.get(extra) or "").strip()
+        if value:
+            mobile = value
+            break
+    if not phone and mobile:
+        phone = mobile
     return {
         "name": address.name,
         "title": address.get("address_title") or "",
@@ -466,7 +477,8 @@ def _map_address(address):
         "state": address.get("state") or "",
         "pincode": address.get("pincode") or "",
         "country": address.get("country") or "",
-        "phone": address.get("phone") or "",
+        "phone": phone,
+        "mobile": mobile,
         "email": address.get("email_id") or "",
         "gstin": address.get("gstin") or "",
         "is_primary": int(address.get("is_primary_address") or 0),
@@ -775,6 +787,33 @@ def _js_pdf_ready(js_status):
     return js_status == JS_CUSTOMER_APPROVED
 
 
+def _default_print_format(doctype):
+    """Print Format marked default on the DocType (Property Setter, then DocType)."""
+    doctype = (doctype or "").strip()
+    if not doctype:
+        return "Standard"
+    cache = getattr(frappe.local, "_appe_default_print_formats", None)
+    if cache is None:
+        cache = {}
+        frappe.local._appe_default_print_formats = cache
+    if doctype in cache:
+        return cache[doctype]
+    value = (
+        frappe.db.get_value(
+            "Property Setter",
+            {"doc_type": doctype, "property": "default_print_format"},
+            "value",
+            order_by="modified desc",
+        )
+        or ""
+    )
+    value = (value or "").strip()
+    if not value:
+        value = (frappe.get_meta(doctype).get("default_print_format") or "").strip()
+    cache[doctype] = value or "Standard"
+    return cache[doctype]
+
+
 def _map_sales_order(doc, with_items=False):
     js_status = _js_order_status(doc)
     docstatus = int(doc.get("docstatus") or 0)
@@ -797,6 +836,7 @@ def _map_sales_order(doc, with_items=False):
         # Qty change while sales-approved or after the customer saves a correction.
         "can_edit": js_status in JS_CUSTOMER_EDITABLE and docstatus == 0,
         "can_download_pdf": _js_pdf_ready(js_status),
+        "print_format": _default_print_format("Quotation"),
         "delivery_address": doc.get("shipping_address") or doc.get("address_display") or "",
         "total_qty": doc.get("total_qty") or 0,
         "net_total": price(doc.get("net_total")),
@@ -2313,7 +2353,9 @@ def get_order(name):
     doc = _doc("Appe Order", name)
     if doc.get("user") != user and "System Manager" not in frappe.get_roles(user):
         frappe.throw(_("Not permitted"), frappe.PermissionError)
-    return doc.as_dict()
+    payload = doc.as_dict()
+    payload["print_format"] = _default_print_format("Appe Order")
+    return payload
 
 
 @frappe.whitelist()
@@ -2985,7 +3027,8 @@ def download_order_pdf(name):
             frappe.PermissionError,
         )
     doctype = "Quotation" if _erpnext_installed() else "Appe Order"
-    html = frappe.get_print(doctype, name)
+    print_format = _default_print_format(doctype)
+    html = frappe.get_print(doctype, name, print_format=print_format)
     from frappe.utils.pdf import get_pdf
 
     frappe.local.response.filename = f"{name}.pdf"
